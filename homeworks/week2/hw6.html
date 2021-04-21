@@ -1,0 +1,17 @@
+<html>
+可在 dev tools 使用 debugger step (F9) 確認程式執行過程
+<script>
+  function isValid(arr) {
+    for(var i=0; i<arr.length; i++) {
+      if (arr[i] <= 0) {return 'invalid'}
+    }
+    for(var i=2; i<arr.length; i++) {
+      if (arr[i] !== arr[i-1] + arr[i-2]) {return 'invalid'}
+    }
+    return 'valid';
+  }
+  debugger
+  isValid([3, 5, 8, 13, 22, 35]);
+</script>
+<body></body>
+</html>
