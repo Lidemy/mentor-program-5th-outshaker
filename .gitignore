@@ -2,3 +2,6 @@ node_modules/
 conn.php
 .DS_STORE
 .eslintcache
+.eslintrc.js
+examples/.obsidian/
+homeworks/.obsidian/
