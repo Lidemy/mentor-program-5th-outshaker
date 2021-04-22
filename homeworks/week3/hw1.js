@@ -1,5 +1,4 @@
 // hw1 [LIOJ1021 - 好多星星](https://oj.lidemy.com/problem/1021)
-
 const readline = require('readline')
 
 const rl = readline.createInterface({
@@ -14,6 +13,7 @@ rl.on('line', (line) => { lines.push(line) })
 // 輸入結束，開始針對 lines 做處理
 rl.on('close', () => { solve(lines) })
 
+// 上面都不用管，只需要完成這個 function 就好，可以透過 lines[i] 拿取內容
 function stars (n) {
   for (let i = 1; i <= n; i++) {
     let s = ''
@@ -24,7 +24,6 @@ function stars (n) {
   }
 }
 
-// 上面都不用管，只需要完成這個 function 就好，可以透過 lines[i] 拿取內容
 function solve (lines) {
   const n = Number(lines[0])
   stars(n)

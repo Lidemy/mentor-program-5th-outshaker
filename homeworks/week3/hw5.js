@@ -1,5 +1,4 @@
 // hw5 [LIOJ1004 - 聯誼順序比大小](https://oj.lidemy.com/problem/1004)
-
 const readline = require('readline')
 
 const rl = readline.createInterface({
@@ -14,6 +13,7 @@ rl.on('line', (line) => { lines.push(line) })
 // 輸入結束，開始針對 lines 做處理
 rl.on('close', () => { solve(lines) })
 
+// 上面都不用管，只需要完成這個 function 就好，可以透過 lines[i] 拿取內容
 // x > y: true
 function comp (x, y) {
   if (x.length > y.length) {
@@ -31,7 +31,6 @@ function comp (x, y) {
   }
 }
 
-// 上面都不用管，只需要完成這個 function 就好，可以透過 lines[i] 拿取內容
 function solve (lines) {
   const m = Number(lines[0])
   for (let i = 1; i <= m; i++) {

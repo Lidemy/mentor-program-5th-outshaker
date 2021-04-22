@@ -1,5 +1,4 @@
 // hw4 [LIOJ1030 - 判斷迴文](https://oj.lidemy.com/problem/1030)
-
 const readline = require('readline')
 
 const rl = readline.createInterface({

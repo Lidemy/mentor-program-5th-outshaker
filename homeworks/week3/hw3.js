@@ -1,5 +1,4 @@
 // hw3 [LIOJ1020 - 判斷質數](https://oj.lidemy.com/problem/1020)
-
 const readline = require('readline')
 
 const rl = readline.createInterface({
@@ -14,6 +13,7 @@ rl.on('line', (line) => { lines.push(line) })
 // 輸入結束，開始針對 lines 做處理
 rl.on('close', () => { solve(lines) })
 
+// 上面都不用管，只需要完成這個 function 就好，可以透過 lines[i] 拿取內容
 function isPrime (n) {
   const m = Math.sqrt(n)
   if (n === 1) return false
@@ -25,7 +25,6 @@ function isPrime (n) {
   return true
 }
 
-// 上面都不用管，只需要完成這個 function 就好，可以透過 lines[i] 拿取內容
 function solve (lines) {
   const n = Number(lines[0])
   for (let i = 1; i <= n; i++) {
