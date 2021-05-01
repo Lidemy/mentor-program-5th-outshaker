@@ -24,3 +24,41 @@
   國碼：856
   另外，如果沒有找到任何符合的國家，請輸出：「找不到國家資訊」。
 */
+const request = require('request')
+const process = require('process')
+
+const [,, queryWord] = process.argv
+
+function searchCountry(queryWord) {
+  request.get({ url: `https://restcountries.eu/rest/v2/name/${queryWord}` }, (err, res, body) => {
+    if (!err) {
+      console.log(res)
+      console.log(body)
+      try {
+        const countrys = JSON.parse(body)
+        // console.log(countrys)
+        if (Array.isArray(countrys)) {
+          countrys.forEach((c) => {
+            console.log('============')
+            console.log(`國家：${c.name}`)
+            console.log(`首都：${c.capital}`)
+            console.log(`貨幣：${c.callingCodes[0]}`)
+            console.log(`國碼：${c.currencies[0].code}`)
+          })
+        } else if (countrys.status === 404) {
+          console.log('找不到國家資訊')
+        }
+      } catch (e) {
+        console.error(e)
+      }
+    } else {
+      console.warn(err)
+    }
+  })
+}
+
+if (queryWord) {
+  searchCountry(queryWord)
+} else {
+  console.warn('請輸入國家搜尋詞')
+}
