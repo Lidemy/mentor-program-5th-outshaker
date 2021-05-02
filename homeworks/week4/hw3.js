@@ -23,6 +23,8 @@
   貨幣：LAK
   國碼：856
   另外，如果沒有找到任何符合的國家，請輸出：「找不到國家資訊」。
+
+  ref: https://restcountries.eu/#api-endpoints-name
 */
 const request = require('request')
 const process = require('process')
@@ -31,9 +33,14 @@ const [,, queryWord] = process.argv
 
 function searchCountry(queryWord) {
   request.get({ url: `https://restcountries.eu/rest/v2/name/${queryWord}` }, (err, res, body) => {
-    if (!err) {
-      console.log(res)
-      console.log(body)
+    // 發生錯誤提早結束
+    if (err) {
+      console.error(err)
+      return
+    }
+
+    // 正常情況
+    if (res.statusCode >= 200 && res.statusCode < 300) {
       try {
         const countrys = JSON.parse(body)
         // console.log(countrys)
@@ -45,14 +52,18 @@ function searchCountry(queryWord) {
             console.log(`貨幣：${c.callingCodes[0]}`)
             console.log(`國碼：${c.currencies[0].code}`)
           })
-        } else if (countrys.status === 404) {
-          console.log('找不到國家資訊')
         }
       } catch (e) {
         console.error(e)
       }
+
+    // 404 Not Found
+    } else if (res.statusCode === 404) {
+      console.log('找不到國家資訊')
+
+    // 其他類型錯誤
     } else {
-      console.warn(err)
+      console.error(JSON.parse(body))
     }
   })
 }
