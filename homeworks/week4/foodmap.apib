@@ -1,0 +1,247 @@
+FORMAT: 1A
+HOST: https://api.foodmap.com/
+
+# foodmap
+分享好吃的餐廳、挖掘還沒發現的好味道
+
+## 餐廳 [/stores]
+### 列出所有的餐廳餐廳 [GET /stores{?limit,offset}]
++ Parameters
+    + limit: `50` (number, optional) - 列出餐廳的最大數量
+        + Default: `20`
+    + offset: `10` (number, optional) - 列出餐廳的偏移量
+        + Default: `0`
+
++ Response 200 (application/json)
+    + Attributes (array[Store])
+
+### 列出指定餐廳 [GET /stores/{id}]
++ Parameters
+    + id: `8153833a-dcfe-4745-81e7-e80b567ffbf6` (string, required) - 餐廳編號
+
++ Response 200 (application/json)
+    + Attributes (Store)
+
++ Response 404 (application/json)
+```
+        {
+            "status" : 404,
+            "error" : "Not Found",
+        }
+```
+
+### 新增餐廳 [POST]
++ Request (application/json)
+```
+        {
+            "name": "饗食天堂",
+            "img_url": "https://www.example.com/store.png",
+            "type": "中餐",
+            "opening_time": "10:00 - 21:00",
+            "address": "桃園市中壢區元化路357號太平洋SOGO百貨9樓",
+            "fb_page_url": "https://www.example.com/",
+            "tel": "03-4268800"
+        }
+```
+
++ Response 201 (application/json)
+    + Headers
+
+            Location: https://api.foodmap.com/stores/8153833a-dcfe-4745-81e7-e80b567ffbf6
+
+
++ Response 400 (application/json)
+```
+        {
+            "status" : 400,
+            "error" : "Bad Request",
+        }
+```
+
+### 更改餐廳 [PATCH /stores/{id}]
++ Request (application/json)
+```
+        {
+            "name": "饗食天堂",
+            "img_url": "https://www.example.com/store.png",
+            "type": "中餐",
+            "opening_time": "10:00 - 21:00",
+            "address": "桃園市中壢區元化路357號太平洋SOGO百貨9樓",
+            "fb_page_url": "https://www.example.com/",
+            "tel": "03-4268800"
+        }
+```
+
++ Response 200 (application/json)
+
++ Response 400 (application/json)
+```
+        {
+            "status" : 400,
+            "error" : "Bad Request",
+        }
+```
+
++ Response 403 (application/json)
+```
+        {
+            "status" : 403,
+            "error" : "Forbidden",
+        }
+```
+
++ Response 404 (application/json)
+```
+        {
+            "status" : 404,
+            "error" : "Not Found",
+        }
+```
+
+### 刪除餐廳 [DELETE /stores/{id}]
++ Parameters
+    + id: `8153833a-dcfe-4745-81e7-e80b567ffbf6` (string, required) - 餐廳編號
+
++ Response 204 (application/json)
+
+
++ Response 403 (application/json)
+```
+        {
+            "status" : 403,
+            "error" : "Forbidden",
+        }
+```
+
++ Response 404 (application/json)
+```
+        {
+            "status" : 404,
+            "error" : "Not Found",
+        }
+```
+
+## 探索 [/explore]
+### 尋找區域內的推薦餐廳 [GET /explore/{country}{?sortby,priceLevel,opening}]
++ Parameters
+    + country: `台北市` (Country) - 地區
+    + sortby: `rating` (Sortby, optional) - 排序依據
+        + Default: `recent`
+    + priceLevel: `1` (PriceLevel, optional) - 價位水平
+    + opening: `true` (boolean, optional) - 是否營業
+
++ Response 200 (application/json)
+    + Attributes (array[Store])
+
+### 尋找指定類型的推薦餐廳 [GET /explore/list/{mealType}{?sortby,priceLevel,opening}]
++ Parameters
+    + mealType: `中式料理` (MealType) - 餐飲類別
+    + sortby: `rating` (Sortby, optional) - 排序依據
+        + Default: `recent`
+    + priceLevel: `1` (PriceLevel, optional) - 價位水平
+    + opening: `true` (boolean, optional) - 是否營業
+
++ Response 200 (application/json)
+    + Attributes (array[Store])
+
+### 尋找區域內的指定類型的餐廳 [GET /explore/{country}/list/{mealType}{?sortby,priceLevel,opening}]
++ Parameters
+    + mealType: `中式料理` (MealType) - 餐飲類別
+    + sortby: `rating` (Sortby, optional) - 排序依據
+        + Default: `recent`
+    + priceLevel: `1` (PriceLevel, optional) - 價位水平
+    + opening: `true` (boolean, optional) - 是否營業
+
++ Response 200 (application/json)
+    + Attributes (array[Store])
+
+# Group 其他錯誤
+# 500 internal server error
+# 429 Too Many Requests 
+    + Headers
+        Retry-After: 3600
+
+# Data Structures
+## Store
++ store_id: `8153833a-dcfe-4745-81e7-e80b567ffbf6` (string, required) - 店家編號
++ name: `饗食天堂` (string, required) - 店家名稱
++ img_url: `https://www.example.com/store.png` (string, required) - 店家圖片網址
++ star: `3.5` (number, required) - 評等
++ comments: `15` (number, required) - 評論數
++ priceLevel: `2` (number, required) - 價位等級
++ type: `中餐` (string, required) - 料理類型
++ opening_time: `10:00 - 21:00` (string, required) - 營業時間
++ address: `桃園市中壢區元化路357號太平洋SOGO百貨9樓` (string, required) - 店家地址
++ fb_page_url: `https://www.example.com/` (string, required) - 店家粉絲專頁網址
++ tel: `03-4268800` (string, required) - 店家電話
+
+## Country (enum)
++ `台北市`
++ `新北市`
++ `桃園市`
++ `台中市`
++ `台南市`
++ `高雄市`
++ `基隆市`
++ `宜蘭縣`
++ `新竹市`
++ `新竹縣`
++ `苗栗縣`
++ `彰化縣`
++ `雲林縣`
++ `嘉義市`
++ `嘉義縣`
++ `屏東縣`
++ `花蓮縣`
++ `南投縣`
++ `台東縣`
++ `澎湖縣`
++ `金門縣`
+
+## MealType (enum)
++ `火鍋`
++ `早午餐`
++ `小吃`
++ `餐酒館/酒吧`
++ `精緻高級`
++ `約會餐廳`
++ `甜點`
++ `燒烤`
++ `日本料理`
++ `居酒屋`
++ `義式料理`
++ `中式料理`
++ `韓式料理`
++ `泰式料理`
++ `美式料理`
++ `港式料理`
++ `冰品飲料`
++ `蛋糕`
++ `吃到飽`
++ `合菜`
++ `牛肉麵`
++ `牛排`
++ `咖啡`
++ `素食`
++ `寵物友善`
++ `景觀餐廳`
++ `親子餐廳`
++ `拉麵`
++ `咖哩`
++ `消夜`
++ `早餐`
++ `午餐`
++ `晚餐`
++ `下午茶`
+
+## Sortby (enum)
++ `recent` - 最新
++ `rating` - 評分最高
++ `popular` - 人氣最高
+
+## PriceLevel (enum)
++ 1 - 小於 150 元
++ 2 - 150 - 600 元
++ 3 - 600 - 1200 元
++ 4 - 1200 元以上
+
