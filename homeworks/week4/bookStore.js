@@ -9,7 +9,7 @@ function _basicHandler(err, res, body) {
   } catch (e) {
     console.error(e)
   }
-  return undefined
+  return {} // 回傳空的 object 避免後續操作問題
 }
 
 const bookStoreAPI = {
