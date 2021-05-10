@@ -18,7 +18,8 @@
   | 更改書籍資訊 | PATCH  | /books/:id | name: 書名              | 無              |
 */
 const process = require('process')
-const bookstore = require('./bookStore')
+// const bookstore = require('./bookStore') // use package: request
+const bookstore = require('./bookStore-v2') // use native lib: https
 
 const helpStr = `node hw2.js list                       印出前二十本書的 id 與書名
 node hw2.js read <id>                  輸出第 <id> 本的書

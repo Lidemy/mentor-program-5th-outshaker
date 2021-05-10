@@ -18,11 +18,11 @@ function main() {
     console.error('require gameWord')
     return
   }
-  step1(clientId, appToken)
+  validateToken(clientId, appToken)
 }
 
-// 取得憑證 getAppToken
-function step0(clientId, clientSecret) {
+// step0: 取得憑證 getAppToken
+function getAppToken(clientId, clientSecret) {
   console.log('step0: getAppToken')
   request.post({
     url: 'https://id.twitch.tv/oauth2/token',
@@ -35,26 +35,27 @@ function step0(clientId, clientSecret) {
       client_secret: clientSecret,
       grant_type: 'client_credentials'
     }
-  }, (err, res, body) => {
-    console.log('step0-callback')
-    if (err) {
-      console.error(err)
-      return
-    }
-    if (res.statusCode >= 200 && res.statusCode < 300) {
-      appToken = JSON.parse(body).access_token
-      step1(clientId, appToken, true) // #goto step1
-    } else { // 失敗，在此結束
-      console.log(res.statusCode)
-      console.error('無法申請憑證，請確認 clientSecret 資訊是否正確')
-      const data = JSON.parse(body)
-      console.log(data)
-    }
-  })
+  }, getAppTokenCB)
+}
+function getAppTokenCB(err, res, body) {
+  console.log('step0-callback')
+  if (err) {
+    console.error(err)
+    return
+  }
+  if (res.statusCode >= 200 && res.statusCode < 300) {
+    appToken = JSON.parse(body).access_token
+    validateToken(clientId, appToken, true) // #goto step1
+  } else { // 失敗，在此結束
+    console.log(res.statusCode)
+    console.error('無法申請憑證，請確認 clientSecret 資訊是否正確')
+    const data = JSON.parse(body)
+    console.log(data)
+  }
 }
 
-// 驗證憑證 validateToken
-function step1(clientId, appToken, retry = false) {
+// step1: 驗證憑證
+function validateToken(clientId, appToken, retry = false) {
   console.log('step1: validateToken')
   request.get({
     url: 'https://id.twitch.tv/oauth2/validate',
@@ -70,9 +71,9 @@ function step1(clientId, appToken, retry = false) {
       return
     }
     if (res.statusCode >= 200 && res.statusCode < 300) {
-      step2(clientId, appToken, gameWord) // gameWord 用全域變數抓 #goto step2
-    } else if (res.statusCode === 401 && !retry) { // 驗證失敗且沒有重新申請過，更新憑證
-      step0(clientId, clientSecret) // #goto step0
+      getGameId(clientId, appToken, gameWord) // gameWord 用全域變數抓 #goto step2
+    } else if (res.statusCode === 401 && !retry) { // 驗證失敗且沒有重新申請過，更新憑證 note: retry needs closure
+      getAppToken(clientId, clientSecret) // #goto step0
     } else { // 異常狀況
       console.log(res.statusCode)
       const data = JSON.parse(body)
@@ -81,8 +82,8 @@ function step1(clientId, appToken, retry = false) {
   })
 }
 
-// 取得遊戲編號 getGameId
-function step2(clientId, appToken, gameWord) {
+// step2: 取得遊戲編號
+function getGameId(clientId, appToken, gameWord) {
   console.log('step2: getGameId')
   request.get({
     url: 'https://api.twitch.tv/helix/search/categories',
@@ -95,33 +96,38 @@ function step2(clientId, appToken, gameWord) {
     qs: {
       query: gameWord
     }
-  }, (err, res, body) => {
-    console.log('step2-callback')
-    if (res.statusCode >= 200 && res.statusCode < 300) {
-      const json = JSON.parse(body)
-      // console.log(json)
-      let isFound = false
-      if (json.data && Array.isArray(json.data)) {
-        for (const d of json.data) {
-          console.log(`${d.id}\t\t${d.name}`)
-          if (gameWord === d.name) {
-            isFound = true
-            console.log(`find ${gameWord} => ${d.id}`)
-            step3(clientId, appToken, d.id, 200) // #goto step3
-            break
-          }
+  }, getGameIdCB)
+}
+function getGameIdCB(err, res, body) {
+  console.log('step2-callback')
+  if (err) {
+    console.error(err)
+    return
+  }
+  if (res.statusCode >= 200 && res.statusCode < 300) {
+    const json = JSON.parse(body)
+    // console.log(json)
+    let isFound = false
+    if (json.data && Array.isArray(json.data)) {
+      for (const d of json.data) {
+        console.log(`${d.id}\t\t${d.name}`)
+        if (gameWord === d.name) {
+          isFound = true
+          console.log(`find ${gameWord} => ${d.id}`)
+          fetchStreams(clientId, appToken, d.id, 200) // #goto step3
+          break
         }
-        if (!isFound) { console.log('no this game') }
       }
-      console.log('json data is wrong')
-    } else {
-      console.log(res.statusCode, JSON.parse(body))
+      if (!isFound) { console.log('no this game') }
     }
-  })
+    console.log('json data is wrong')
+  } else {
+    console.log(res.statusCode, JSON.parse(body))
+  }
 }
 
-// 抓取實況清單 fetchStreams
-function step3(clientId, appToken, gameId, topN) {
+// step3: 抓取實況清單
+function fetchStreams(clientId, appToken, gameId, topN) {
   console.log('step3: fetchStreams')
   let result = []
   function _fetchStreams(clientId, appToken, gameId, topN, now, cursor) {
@@ -142,6 +148,10 @@ function step3(clientId, appToken, gameId, topN) {
       }
     }, (err, res, body) => {
       console.log('_fetchStreams-callback')
+      if (err) {
+        console.error(err)
+        return
+      }
       if (res.statusCode >= 200 && res.statusCode < 300) {
         const json = JSON.parse(body)
         // console.log(json)
