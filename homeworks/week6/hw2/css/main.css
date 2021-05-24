@@ -1,42 +1,30 @@
 body {
-  font-family: "Microsoft JhengHei", 微軟正黑體;
+  font-family: "Microsoft JhengHei", "微軟正黑體";
+  background-color: rgba(0, 0, 0, 0.3);
 }
 
-.top {
-  padding: 121px 0 66px;
-}
-
-.form-bg {
-  width: 645px;
-  margin: 0 auto;
-  padding-top: 8px;
+.form {
+  max-width: 645px;
+  margin: 121px auto 64px;
+  padding: 54px 0 35px 40px;
+  border-top: 8px solid #fad312;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
-  background: #fad312;
   box-shadow: -1.8px 2.4px 5px rgba(0, 0, 0, 0.3);
-}
-
-.form-body {
-  padding: 54px 0 35px 40px;
   background: white;
-  background: #fff;
 }
 
 .form-title {
   font-size: 36px;
   letter-spacing: -1.8px;
   font-weight: bold;
-  color: #000
+  color: black;
 }
 
 .form-desc {
-  margin-top: 35px;
+  margin-top: 1.4em;
   font-size: 14px;
-}
-
-.form-desc2 {
-  margin-top: 11px;
-  font-size: 14px;
+  line-height: 2em;
 }
 
 .required-notation {
@@ -45,28 +33,30 @@ body {
   color: #e74149;
 }
 
-.input-name {
+.input-block {
   margin-top: 55px;
+}
+
+.input-title {
   font-size: 20px;
   font-weight: bold;
 }
 
 .required:after {
   content: "*";
-  /* margin-left: 1em; */
-  margin-left: 1ex;
+  margin-left: 1ex; /* ex matter than em */
   font-weight: bold;
   color: #e74149;
 }
 
 .input {
-  margin-top: 20px;
+  margin-top: 1.2em;
   font-size: 16px;
 }
 
 .input-text {
-  width: 287px;
-  height: 23px;
+  width: 18em; /* 287px */
+  height: 1.5em; /* 23px */
 }
 
 /* .input-radio {} */
@@ -80,21 +70,18 @@ body {
   border-radius: 5px;
 }
 
-.form-desc3 {
-  font-size: 16px;
-  margin-top: 12px;
-}
-
-.bottom {
-  box-sizing: border-box;
-  height: 60px;
+footer {
+  padding: 2em 1em;
   border-top: solid 3px #fad312;
-  background: black;
-}
-
-.copyright {
-  margin: 2em auto;
   text-align: center;
   font-size: 13px;
+  background: black;
   color: #999;
+}
+
+/* 768 px */
+@media screen and (max-width: 48em) {
+  .form {	
+    margin: 121px 0.5em 64px;
+  }
 }
