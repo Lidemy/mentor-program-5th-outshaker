@@ -81,7 +81,22 @@ footer {
 
 /* 768 px */
 @media screen and (max-width: 48em) {
-  .form {	
-    margin: 121px 0.5em 64px;
+  .form {
+    margin: 6em auto 2em;
+  }
+}
+
+/* 480 px */
+@media screen and (max-width: 30em) {
+  .form-title {
+    font-size: 32px;
+  }
+  .form {
+    margin: 3em 0.5em 3em;
+    padding: 0 0.5em;
+  }
+  .input-text {
+    /* width: 87%; */
+    width: 61.7%; /* golden ratio */
   }
 }

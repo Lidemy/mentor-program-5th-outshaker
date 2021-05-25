@@ -35,7 +35,6 @@ body {
 
 .navbar-menu {
   display: flex;
-  margin: 0 0 0 6px;
   padding: 0;
   flex-direction: row;
   justify-content: space-around;
@@ -43,7 +42,7 @@ body {
 }
 
 .navbar-menu li {
-  margin-left: 10px;
+  padding: 1em 2em;
   list-style: none;
   border-radius: 8px;
   font-size: 18px;
@@ -51,9 +50,13 @@ body {
   transition: background 0.3s;
 }
 
+.navbar-menu li + li {
+  margin-left: 10px;
+}
+
 .navbar-menu a {
-  display: inline-block;
-  padding: 12px 24px;
+  /* display: inline-block; */
+  /* padding: 12px 24px; */
   text-decoration: none;
   color: black;
   transition: color 0.3s;
@@ -168,15 +171,18 @@ a:hover {
 
 .menu-imgs {
   display: flex;
+  justify-content: center;
 }
 
 .menu-img {
-  flex: auto;
+  flex:1; /* same as flex: 1 1 0% */
+  max-width: 480px; /* fix size */
+  max-height: 480px; /* fix size */
 }
 
 .menu-img img {
   width: 100%;
-  z-index: 2;
+  height: 100%;
 }
 
 /* .recommendation */
@@ -190,16 +196,16 @@ a:hover {
 }
 
 .comments {
+  /* display: inline-block; */
   display: flex;
   position: relative;
-  /* display: inline-block; */
-  /* height: 220px; */
   padding: 16px;
-  margin-top: 45px;
+  margin-top: 45px; /* 預留空間給頭像 */
 }
 
 .comment {
-  flex: auto;
+  /* flex: auto; 沒辦法均分 */
+  flex: 1;
   position: relative;
   border: solid 1px #c7e5ec;
   border-radius: 5px;
@@ -213,8 +219,6 @@ a:hover {
 
 .comment-avatar {
   position: absolute;
-  /* position: relative; */
-  border-radius: 50%;
   top: -53px;
   left: 50%;
   transform: translateX(-50%);
@@ -223,18 +227,18 @@ a:hover {
 .comment-avatar img {
   width: 105px;
   height: 105px;
+  border-radius: 50%;
+  overflow: hidden;
 }
 
 .comment-username {
-  /* position: absolute; */
   margin-top: 5px;
   line-height: 18px;
   text-overflow: ellipsis; /* 名稱過長變刪節號 */
 }
 
 .comment-content {
-  margin: 75px 0 5px; /* 寬螢幕 */
-  /* overflow: hidden; */
+  margin: 75px 0 5px; /* 上方預留空間給人物頭像 */
   text-align: left;
   font-size: 16px;
   line-height: 1.5em;
@@ -280,34 +284,51 @@ a:hover {
   background-color: #35564b;
 }
 
-/* for mobile < 480px */
+/* use flex-wrap to render only for 1080px - 1440px */
+@media screen and (max-width: 1440px) {
+  .menu-imgs {
+    flex-wrap: wrap;
+  }
+
+  .menu-img {
+    flex:initial; /* flex: 0 1 auto */
+  }
+}
+
+/* below 768px (48em) for tablet */
+@media screen and (max-width: 48em) {
+  .navbar-menu li {
+    padding: 1em 1em;
+  }
+  .navbar-menu li + li {
+    margin-left: 0;
+  }
+}
+
+/* below 480px (30em) for mobile */
 @media screen and (max-width: 30em) {
   .navbar {
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
+    display: block; /* 讓 .navbar-menu flex 可以正常排版 */
     padding: 10px 0;
   }
   
-  .navbar-menu {
+  .navbar-menu li {
+    padding: 1em 0.2em;
+  }
+  
+  .buttons {
+    flex-direction: row;
+    justify-content: space-evenly;
     margin: 0;
   }
   
-  .navbar-menu li {
-    margin: 0;
-  }
-  .buttons {
-    flex-direction: column;
-    margin: 0;
+  .button {
+    padding: 1rem;
+    font-size: 1.6rem;
   }
 
   .button + .button {
-    margin:10px 0 0 0;
-  }
-  
-  .menu-imgs {
-    flex-direction: column;
-    margin: 0;
+    margin:0 0.5rem;
   }
   
   .comments {
@@ -322,5 +343,13 @@ a:hover {
   
   .comment+.comment {
     margin: 75px 0 0;
+  }
+  
+  .container {
+    flex-flow: column-reverse; /* site 先出現 */
+  }
+  
+  .contact {
+    padding: 1em 0;
   }
 }
