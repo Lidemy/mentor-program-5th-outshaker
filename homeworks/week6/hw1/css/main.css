@@ -284,8 +284,8 @@ a:hover {
   background-color: #35564b;
 }
 
-/* use flex-wrap to render only for 1080px - 1440px */
-@media screen and (max-width: 1440px) {
+/* use flex-wrap when below 1440px */
+@media screen and (max-width: 90em) {
   .menu-imgs {
     flex-wrap: wrap;
   }
