@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="zh-tw">
+<head>
+  <meta charset="utf-8">
+  <title>新拖延運動報名表單</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <form action="" method="post" id="thisForm" class="form">
+    <h1 class="form-title">新拖延運動報名表單</h1>
+    <p class="form-desc">活動日期：2020/12/10 ~ 2020/12/11<br>活動地點：台北市大安區新生南路二段1號</p>
+    <p class="required-notation">* 必填</p>
+    <div class="input-block required">
+      <div class="input-title required">暱稱</div>
+      <input type="text" class="input input-text required" placeholder="您的回答" name="nickname"><br>
+      <div class="warning">這是必填問題</div>
+    </div>
+    <div class="input-block required">
+      <div class="input-title required">電子郵件</div>
+      <input type="email" class="input input-text required" placeholder="您的電子郵件" name="email"><br>
+      <div class="warning">這是必填問題</div>
+    </div>
+    <div class="input-block required">
+      <div class="input-title required">手機號碼</div>
+      <input type="tel" class="input input-text required" placeholder="您的手機號碼" name="cellphone"><br>
+      <div class="warning">這是必填問題</div>
+    </div>
+    <div class="input-block required">
+      <div class="input-title required">報名類型</div>
+      <input type="radio" class="input input-radio required" id="attend-type-A" name="attend-type" value="A">
+      <label for="attend-type-A">躺在床上用想像力實作</label><br>
+      <input type="radio" class="input input-radio required" id="attend-type-B" name="attend-type" value="B">
+      <label for="attend-type-B">趴在地上滑手機找現成的</label><br>
+      <div class="warning">這是必填問題</div>
+    </div>
+    <div class="input-block required">
+      <div class="input-title required">怎麼知道這個活動的？</div>
+      <input type="text" class="input input-text required" placeholder="您的回答" name="referal"><br>
+      <div class="warning">這是必填問題</div>
+    </div>
+    <div class="input-block">
+      <div class="input-title">其他</div>
+      <p class="form-desc">對活動的一些建議</p>
+      <input type="text" class="input input-text" placeholder="您的回答" name="advice"><br>
+      <div class="warning"></div>
+    </div>
+    <input type="submit" class="input input-submit" value="提交">
+    <p class="form-desc">請勿透過表單送出您的密碼。</p>
+  </form>
+  <footer>
+    <div class="copyright">© 2020 © Copyright. All rights Reserved.</div>
+  </footer>
+  <script>
+    function verify(inputBlock) {
+      let verifity
+      // 目前只針對必填選項檢查
+      if (!inputBlock.classList.contains("required")) {
+        return true
+      }
+      let inputs = inputBlock.querySelectorAll("input")
+      if (inputs.length == 1) {
+        verifity = (inputs[0].value) ? true : false
+      } else {
+        // 多輸入肯定是 radio 或 checkbox，但目前只針對 radio 處理就好
+        // 假定 input 的 name 都相同，簡化判定
+        let cout = [...inputs].filter((x) => x.checked).length
+        verifity = (cout == 1) ? true : false
+      }
+      inputBlock.setAttribute("valid", verifity)
+      inputBlock.querySelector(".warning").style.display = (verifity) ? "none" : "block"
+      console.log(`${inputs[0].name} is ${(verifity) ? "OK" : "empty"}`)
+      if (!verifity) inputs[0].focus()
+      return verifity
+    }
+    function inputBlockToString(inputBlock) {
+      let name = inputBlock.querySelector("div.input-title").innerText
+      let inputs = inputBlock.querySelectorAll("input")
+      let content
+      if (inputs.length == 1) {
+        content = inputs[0].value
+      } else {
+        if (inputs[0].type == "radio") {
+          content = inputBlock.querySelector(`label[for=${inputs[0].id}]`).innerText
+        } // TODO: support checkbox
+      }
+      return `${name} ${content}\n`
+    }
+    document.querySelector("#thisForm").onsubmit = (evt) => {
+      console.log("onSubmit")
+      let inputBlockArray = [...document.querySelectorAll(".input-block")]
+      if (inputBlockArray.every((e) => verify(e))) {
+        output = inputBlockArray.reduce((output,elem) => (output+inputBlockToString(elem)), "")
+        alert(output)
+        console.log("submit")
+      } else {
+        evt.preventDefault()
+      }
+    }
+  </script>
+</body>
+</html>
