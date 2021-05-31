@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="zh-tw">
+<head>
+  <meta charset="UTF-8">
+  <title>ToDo List</title>
+  <style>
+    body {
+      font-family: "Microsoft JhengHei";
+    }
+    
+    h1 {
+      text-align: center;
+    }
+    
+    .container {
+      width: 38.2%;
+      margin: 0 auto;
+      padding: 1em;
+      border: 2px solid #ccc;
+      border-radius: 2px;
+    }
+    
+    .list {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .item {
+      position: relative;
+    }
+    
+    input[type=checkbox] {
+      box-sizing: border-box;
+      width: 16px;
+      height: 16px;
+      margin: 0;
+    }
+    
+    input[checked] + span {
+      text-decoration: line-through;
+    }
+    
+    not:(input[checked]) + span {
+      text-decoration: none;
+    }
+    
+    .btn-checkbox {
+      box-sizing: border-box;
+      width: 16px;
+      height: 16px;
+    }
+    
+    .inputBar {
+      display: block;
+      width: 61.8%;
+      /* margin:0 auto; */
+      margin-left: 20px;
+      /* text-align: center; */
+    }
+    
+    .del-btn {
+      position: absolute;
+      right: 0;
+      text-align: right;
+      user-select: none; 
+    }
+  </style>
+</head>
+<body>
+  <h1>#TODO</h1>
+  <div class="container">
+    <ul class="list">
+      <li class="item">
+        <input type="checkbox">
+        <span>交 week7 作業</span>
+        <span class="del-btn">X</span>
+      </li>
+      <li class="item">
+        <input type="checkbox" checked>
+        <span>解每日任務</span>
+        <span class="del-btn">X</span>
+      </li>
+    </ul>
+    <input type="text" class="inputBar" placeholder="有什麼事情想完成呢？" name="inbox">
+    <button type="button" class="btn-newItem">＋</button>
+  </div>
+  <script>
+    // 建立 LiHTMLElement，也許之後會改用 class Item extends HTMLElement 方式實作
+    function Item(content) {
+      let e = document.createElement('li')
+      e.classList.add("item")
+      e.innerHTML = `<input type="checkbox"><span>${content}</span><span class="del-btn">X</span>`
+      return e
+    }
+    
+    function addItem() {
+      let bar = document.querySelector(".inputBar")
+      if (bar.value) {
+        console.log(`add item: ${bar.value}`)
+        document.querySelector(".list").appendChild(Item(bar.value))
+        bar.value = ""
+      }
+    }
+
+    function toggleChecked(e) {
+      let input = e.target.closest('input')
+      if (input.tagName == "INPUT" && input.getAttribute("type") == "checkbox") {
+        let checked = input.getAttribute("checked")
+        console.log("before toggle:", input.getAttribute("checked"), input)
+        input.toggleAttribute("checked")
+        console.log("after toggle:", input.getAttribute("checked"), input)
+      }
+    }
+    function removeItem(e) {
+      if (e.target.matches(".del-btn")) {
+        console.log("Event removeItem: ", e.target)
+        let item = e.target.closest('li.item')
+        if (item) item.remove()
+      }
+    }
+    
+    let list = document.querySelector(".list")
+    //list.addEventListener("addItem", addItem) //自訂事件
+    list.addEventListener("click", removeItem)
+    list.addEventListener("change", toggleChecked)
+    let btn = document.querySelector(".btn-newItem")
+    btn.addEventListener("click", addItem)
+  </script>
+</body>
+</html>
