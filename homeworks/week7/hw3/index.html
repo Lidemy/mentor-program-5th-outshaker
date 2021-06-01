@@ -5,6 +5,7 @@
   <title>ToDo List</title>
   <style>
     body {
+      position: relative;
       font-family: "Microsoft JhengHei";
     }
     
@@ -14,7 +15,7 @@
     
     .container {
       width: 38.2%;
-      margin: 0 auto;
+      margin: 0 auto 3em;
       padding: 1em;
       border: 2px solid #ccc;
       border-radius: 2px;
@@ -29,11 +30,18 @@
       position: relative;
     }
     
+    .item:hover .del-btn {
+      visibility: visible;
+    }
+    .item-desc {
+      word-break: break-all; /* 防止內容超過寬度 */
+    }
+    
     input[type=checkbox] {
       box-sizing: border-box;
       width: 16px;
       height: 16px;
-      margin: 0;
+      margin-right: 0.5em;
     }
     
     input[checked] + span {
@@ -49,21 +57,29 @@
       width: 16px;
       height: 16px;
     }
-    
-    .inputBar {
-      display: block;
-      width: 61.8%;
-      /* margin:0 auto; */
-      margin-left: 20px;
-      /* text-align: center; */
-    }
-    
+
     .del-btn {
       position: absolute;
       right: 0;
       text-align: right;
-      user-select: none; 
+      user-select: none; /* 設置無法選取，在複製文字時不會被複製 */
+      visibility: hidden;
     }
+    
+    .input-block {
+      position: fixed;
+      z-index: 2;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 1em;
+    }
+    
+    .inputBar {
+      margin: 1px;
+    }
+    
+    /* .btn-newItem { } */
+
   </style>
 </head>
 <body>
@@ -71,60 +87,81 @@
   <div class="container">
     <ul class="list">
       <li class="item">
-        <input type="checkbox">
-        <span>交 week7 作業</span>
-        <span class="del-btn">X</span>
+        <input type="checkbox"><span class="item-desc">交 week7 作業</span><span class="del-btn">X</span>
       </li>
       <li class="item">
-        <input type="checkbox" checked>
-        <span>解每日任務</span>
-        <span class="del-btn">X</span>
+        <input type="checkbox" checked><span>解每日任務</span><span class="del-btn">X</span>
       </li>
     </ul>
+  </div>
+  <div class="input-block">
     <input type="text" class="inputBar" placeholder="有什麼事情想完成呢？" name="inbox">
-    <button type="button" class="btn-newItem">＋</button>
+    <button type="button" class="btn-newItem" disabled>＋</button>
   </div>
   <script>
-    // 建立 LiHTMLElement，也許之後會改用 class Item extends HTMLElement 方式實作
+    // 根據文字內容建立 Li 元素，也許之後會改用 class Item extends HTMLElement 方式實作
     function Item(content) {
       let e = document.createElement('li')
       e.classList.add("item")
       e.innerHTML = `<input type="checkbox"><span>${content}</span><span class="del-btn">X</span>`
       return e
     }
-    
-    function addItem() {
+
+    function addItemEmiter() {
       let bar = document.querySelector(".inputBar")
-      if (bar.value) {
-        console.log(`add item: ${bar.value}`)
-        document.querySelector(".list").appendChild(Item(bar.value))
+      if (bar.value) { // 確認輸入框有內容才處理
+        const addItemEvent = new CustomEvent('addItem', {
+          bubbles: true,
+          detail: bar.value
+        });
         bar.value = ""
+        const cancelled =!document.querySelector(".list").dispatchEvent(addItemEvent)
+        if (cancelled) console.log("addItem Event cancelled")
       }
+    }
+    
+    function onAddItem(e) {
+      /* console.log(`Event addItem: ${e.detail}`, e.target) */
+      document.querySelector(".list").appendChild(Item(e.detail))
+      window.scrollTo(0, document.body.scrollHeight) // 捲到最底
     }
 
     function toggleChecked(e) {
-      let input = e.target.closest('input')
-      if (input.tagName == "INPUT" && input.getAttribute("type") == "checkbox") {
+      /* console.log('toggleChecked:', e.target) */
+      let input = e.target.closest('input[type=checkbox]')
+      if (input) {
         let checked = input.getAttribute("checked")
-        console.log("before toggle:", input.getAttribute("checked"), input)
+        /* console.log("before toggle:", input.getAttribute("checked"), input) */
         input.toggleAttribute("checked")
-        console.log("after toggle:", input.getAttribute("checked"), input)
+        /* console.log("after toggle:", input.getAttribute("checked"), input)*/
       }
     }
+    
     function removeItem(e) {
+      /* console.log('removeItem:', e.target) */
       if (e.target.matches(".del-btn")) {
-        console.log("Event removeItem: ", e.target)
         let item = e.target.closest('li.item')
         if (item) item.remove()
       }
     }
-    
+    function updateBtnStatus(e) { // this == .inputBar
+      /* console.log("input", e.target, e.target.value) */
+      document.querySelector(".btn-newItem").disabled = e.target.value == ""
+    }
+
     let list = document.querySelector(".list")
-    //list.addEventListener("addItem", addItem) //自訂事件
+    list.addEventListener("addItem", onAddItem) // 自訂事件
     list.addEventListener("click", removeItem)
     list.addEventListener("change", toggleChecked)
     let btn = document.querySelector(".btn-newItem")
-    btn.addEventListener("click", addItem)
+    btn.addEventListener("click", addItemEmiter)
+
+    let bar = document.querySelector(".inputBar")
+    bar.addEventListener("keydown", (e) => {
+      if (e.keyCode == 13) addItemEmiter()
+    })
+    bar.addEventListener("input", updateBtnStatus)
+  
   </script>
 </body>
 </html>
