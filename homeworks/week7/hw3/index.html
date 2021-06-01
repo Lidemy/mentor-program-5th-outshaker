@@ -99,14 +99,17 @@
     <button type="button" class="btn-newItem" disabled>＋</button>
   </div>
   <script>
-    // 根據文字內容建立 Li 元素，也許之後會改用 class Item extends HTMLElement 方式實作
-    function Item(content) {
-      let e = document.createElement('li')
-      e.classList.add("item")
-      e.innerHTML = `<input type="checkbox"><span>${content}</span><span class="del-btn">X</span>`
-      return e
+    // 根據文字內容建立 Li 元素
+    // 用法參照 https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define
+    class Item extends HTMLLIElement {
+      constructor(content) {
+        super()
+        this.classList.add("item")
+        this.innerHTML = `<input type="checkbox"><span>${content}</span><span class="del-btn">X</span>`
+      }
     }
-
+    customElements.define('li-item', Item , { extends: 'li' });
+    
     function addItemEmiter() {
       let bar = document.querySelector(".inputBar")
       if (bar.value) { // 確認輸入框有內容才處理
@@ -122,7 +125,7 @@
     
     function onAddItem(e) {
       /* console.log(`Event addItem: ${e.detail}`, e.target) */
-      document.querySelector(".list").appendChild(Item(e.detail))
+      document.querySelector(".list").appendChild(new Item(e.detail))
       window.scrollTo(0, document.body.scrollHeight) // 捲到最底
     }
 
