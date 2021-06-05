@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="zh-tw">
+<head>
+  <meta charset="UTF-8">
+  <title>ToDo List</title>
+  <style>
+    body {
+      position: relative;
+      font-family: "Microsoft JhengHei";
+    }
+    
+    h1 {
+      text-align: center;
+    }
+    
+    .container {
+      width: 38.2%;
+      margin: 0 auto 3em;
+      padding: 1em;
+      border-radius: 2px;
+      /* background-color: #ffef00; */ 
+      /* border: 2px solid #ccc; */
+      box-shadow: rgb(0 0 0 / 35%) 0px 5px 15px;
+    }
+    
+    .list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .item {
+      position: relative;
+    }
+
+    .item-desc {
+      word-break: break-all; /* 防止內容超過寬度 */
+    }
+    
+    input[type=checkbox] {
+      box-sizing: border-box;
+      width: 16px;
+      height: 16px;
+      margin-right: 0.5em;
+    }
+    
+    input[checked] + span {
+      text-decoration: line-through;
+    }
+    
+    not:(input[checked]) + span {
+      text-decoration: none;
+    }
+    
+    .btn-checkbox {
+      box-sizing: border-box;
+      width: 16px;
+      height: 16px;
+    }
+
+    .del-btn {
+      position: absolute;
+      right: 0;
+      text-align: right;
+      user-select: none; /* 設置無法選取，在複製文字時不會被複製 */
+      visibility: hidden;
+    }
+    
+    .item:hover .del-btn {
+      visibility: visible;
+    }
+    
+    /* 使用自訂屬性達成的提示文字效果 */
+    /* 參考 https://stackoverflow.com/questions/61412830/is-it-possible-to-not-trigger-hover-on-before-or-after */
+    .del-btn[data-tooltips] {
+      /* position: relative; */
+      cursor: default;
+    }
+    
+    .del-btn[data-tooltips]:hover::before {
+      pointer-events: none;
+      content: attr(data-tooltips);
+      position: absolute;
+      /* top: 0; */
+      transform: translateY(-100%);
+      background: white;
+      border: 1px solid black;
+      white-space:nowrap;
+    }
+
+    .input-block {
+      position: fixed;
+      z-index: 2;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 1em;
+    }
+    
+    .inputBar {
+      margin: 1px;
+    }
+    
+    .btn-newItem {
+      box-shadow: rgb(0 0 0 / 15%) 1.95px 1.95px 2.6px;
+    }
+
+  </style>
+</head>
+<body>
+  <h1 title="... or not #TODO, It's a question.">#TODO</h1>
+  <div class="container">
+    <ul class="list">
+      <li class="item">
+        <input type="checkbox"><span class="item-desc">交 week7 作業</span><span class="del-btn" data-tooltips="移除">X</span>
+      </li>
+      <li class="item">
+        <input type="checkbox" checked><span>解每日任務</span><span class="del-btn" data-tooltips="移除">X</span>
+      </li>
+    </ul>
+  </div>
+  <div class="input-block">
+    <input type="text" class="inputBar" placeholder="有什麼事情想完成呢？" name="inbox">
+    <button type="button" class="btn-newItem" disabled>＋</button>
+  </div>
+  <script>
+    // 根據文字內容建立 Li 元素
+    // 用法參照 https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define
+    class Item extends HTMLLIElement {
+      constructor(content) {
+        super()
+        this.classList.add("item")
+        this.innerHTML = `<input type="checkbox"><span class="item-desc">${content}</span><span class="del-btn" data-tooltips="移除">X</span>`
+      }
+    }
+    customElements.define('li-item', Item , { extends: 'li' })
+    
+    function addItemEmiter() {
+      let bar = document.querySelector(".inputBar")
+      if (bar.value) { // 確認輸入框有內容才處理
+        const addItemEvent = new CustomEvent('addItem', {
+          bubbles: true,
+          detail: bar.value
+        });
+        bar.value = ""
+        const cancelled =!document.querySelector(".list").dispatchEvent(addItemEvent)
+        if (cancelled) console.log("addItem Event cancelled")
+      }
+    }
+    
+    function onAddItem(e) {
+      /* console.log(`Event addItem: ${e.detail}`, e.target) */
+      document.querySelector(".list").appendChild(new Item(e.detail))
+      window.scrollTo(0, document.body.scrollHeight) // 捲到最底
+    }
+
+    function toggleChecked(e) {
+      /* console.log('toggleChecked:', e.target) */
+      let input = e.target.closest('input[type=checkbox]')
+      if (input) {
+        let checked = input.getAttribute("checked")
+        /* console.log("before toggle:", input.getAttribute("checked"), input) */
+        input.toggleAttribute("checked")
+        /* console.log("after toggle:", input.getAttribute("checked"), input)*/
+      }
+    }
+    
+    function removeItem(e) {
+      /* console.log('removeItem:', e.target) */
+      if (e.target.matches(".del-btn")) {
+        let item = e.target.closest('li.item')
+        if (item) item.remove()
+      }
+    }
+    function updateBtnStatus(e) { // this == .inputBar
+      /* console.log("input", e.target, e.target.value) */
+      document.querySelector(".btn-newItem").disabled = e.target.value == ""
+    }
+
+    let list = document.querySelector(".list")
+    list.addEventListener("addItem", onAddItem) // 自訂事件
+    list.addEventListener("click", removeItem)
+    list.addEventListener("change", toggleChecked)
+    let btn = document.querySelector(".btn-newItem")
+    btn.addEventListener("click", addItemEmiter)
+
+    let bar = document.querySelector(".inputBar")
+    bar.addEventListener("keydown", (e) => {
+      if (e.keyCode == 13) addItemEmiter()
+    })
+    bar.addEventListener("input", updateBtnStatus)
+  
+  </script>
+</body>
+</html>

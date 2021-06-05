@@ -1,0 +1,123 @@
+body {
+  font-family: "Microsoft JhengHei", "微軟正黑體";
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.form {
+  max-width: 645px;
+  margin: 121px auto 64px;
+  padding: 54px 35px 40px;
+  border-top: 8px solid #fad312;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  box-shadow: -1.8px 2.4px 5px rgba(0, 0, 0, 0.3);
+  background: white;
+}
+
+.form-title {
+  font-size: 36px;
+  letter-spacing: -1.8px;
+  font-weight: bold;
+  color: black;
+}
+
+.form-desc {
+  margin-top: 1.4em;
+  font-size: 14px;
+  line-height: 2em;
+}
+
+.required-notation {
+  margin-top: 22px;
+  font-size: 16px;
+  color: #e74149;
+}
+
+.input-block {
+  width: 20em;
+  margin-top: 55px;
+  padding: 1em 1em 1em;
+  border-radius: 8px;
+  /* border: 1px solid black; */
+}
+
+/* .input-block.valid { */
+.input-block[valid=true] {
+  border: 1px solid green;
+}
+
+/* .input-block.invalid { */
+.input-block[valid=false] {
+  border: 1px solid red;
+}
+  
+.input-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.input-title.required:after {
+  content: "*";
+  margin-left: 1ex; /* ex matter than em */
+  font-weight: bold;
+  color: #e74149;
+}
+
+.input {
+  margin-top: 1.2em;
+  font-size: 16px;
+}
+
+
+.input-text {
+  width: 18em; /* 287px */
+  height: 1.5em; /* 23px */
+}
+
+.warning {
+  display: none;
+  margin-top: 14px;
+  color: red;
+}
+
+/* .input-radio {} */
+
+.input-submit {
+  box-sizing: border-box;
+  width: 92px;
+  height: 40px;
+  background: #fad312;
+  border: none;
+  border-radius: 5px;
+}
+
+footer {
+  padding: 2em 1em;
+  border-top: solid 3px #fad312;
+  text-align: center;
+  font-size: 13px;
+  background: black;
+  color: #999;
+}
+
+/* 768 px */
+@media screen and (max-width: 48em) {
+  .form {
+    margin: 6em auto 2em;
+  }
+}
+
+/* 480 px */
+@media screen and (max-width: 30em) {
+  .form-title {
+    font-size: 32px;
+  }
+  .form {
+    margin: 3em 0.5em 3em;
+    padding: 0 0.5em;
+  }
+  .input-text {
+    /* width: 87%; */
+    width: 61.7%; /* golden ratio */
+  }
+}
