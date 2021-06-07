@@ -77,20 +77,22 @@ a:hover {
 
 .lottery {
   position: relative;
-  background: url(../img/games-bn.jpg) center/cover no-repeat;
   width: 100%;
   height: 767px;
 }
 
-.lottery::after {
-  position: absolute;
-  content: "";
-  /* background-color: rgba(255, 255, 255, .4); */
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-}
+/* 背景 */
+.lottery.init { background: url(../img/games-bn.jpg) center/cover no-repeat; }
+.lottery[key=FIRST] { background: url(../img/prize1.jpg) center/cover no-repeat; }
+.lottery[key=SECOND] { background: url(../img/prize2.jpg) center/cover no-repeat; }
+.lottery[key=THIRD] { background: url(../img/prize3.jpg) center/cover no-repeat; }
+.lottery[key=NONE] { background-color: black; background-image: none; }
+
+/* 顯示的區塊 */
+.lottery.init > .lottery-dialog { display: block; }
+.lottery.init > .lottery-result { display: none; }
+.lottery > .lottery-dialog { display: none; }
+.lottery > .lottery-result { display: block; }
 
 .lottery-dialog {
   position: relative;
@@ -144,6 +146,7 @@ a:hover {
   background-color: #e62a45;
   color: white;
   font-size: 20px;
+  cursor: pointer;
 }
 
 .lottery-result {
@@ -160,7 +163,11 @@ a:hover {
   color: #292222;
 }
 
-.back-btn {
+/* 微調文字樣式 */
+.lottery[key=NONE] .cheers-text { color: white; }
+.lottery:not([key=NONE]) .cheers-text { text-shadow: 1px 1px 0 white, -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white ; } /* 避免黑色背景干擾的文字外框 */
+
+.btn-back {
   width: 400px;
   /* height: 55px; */
   margin: 55px auto;
@@ -170,6 +177,7 @@ a:hover {
   border-radius: 8px;
   background-color: #e62a45;
   color: white;
+  cursor: pointer;
 }
 
 /* footer */
@@ -227,7 +235,25 @@ a:hover {
   .navbar-menu li {
     padding: 1em 0.2em;
   }
+  
+  .lottery-dialog {
+    width: auto;
+  }
 
+  .lottery-dialog p {
+    display: block;
+    width: auto;
+    margin: 0.5em 0;
+  }
+  
+  .cheers-text {
+    font-size: 30px;
+  }
+  
+  .btn-back {
+    width: auto;
+  }
+  
   .container {
     flex-flow: column-reverse; /* site 先出現 */
   }
