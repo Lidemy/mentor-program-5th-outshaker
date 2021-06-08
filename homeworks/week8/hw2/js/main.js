@@ -41,7 +41,7 @@ function loadTopGames(topGames) {
     gamesElem.appendChild(liElem)
 
     // 設定已選取的遊戲元素
-    if (i === 0) {
+    if (i === '0') {
       activedGameElem = liElem
       liElem.classList.add('active')
     }
