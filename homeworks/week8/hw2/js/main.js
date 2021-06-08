@@ -18,10 +18,15 @@ function queryTopGame() {
       console.error('status: ', req.status) // 顯示 500 錯誤
     }
   }
+  req.addEventListener('loadend', (e) => {
+    console.log('queryTopGame loadend')
+    toggleLoadingStatus()
+  })
   req.open('GET', 'https://api.twitch.tv/kraken/games/top?limit=5')
   req.setRequestHeader('Accept', 'application/vnd.twitchtv.v5+json')
   req.setRequestHeader('Client-ID', 'it0f8c9ly6exspcpzp4chgtniiyoay')
   req.send()
+  toggleLoadingStatus()
 }
 
 // load json and append li.game to ul.games
@@ -31,9 +36,15 @@ function loadTopGames(topGames) {
   for (const i in topGames.top) {
     const liElem = document.createElement('li')
     liElem.classList.add('game')
-    liElem.dataset.index = i
+    // liElem.dataset.index = i // 沒使用到，備存
     liElem.innerText = topGames.top[i].game.name // gameName
     gamesElem.appendChild(liElem)
+
+    // 設定已選取的遊戲元素
+    if (i === 0) {
+      activedGameElem = liElem
+      liElem.classList.add('active')
+    }
   }
   gamesElem.style.visibility = 'visible' // show list after loading
   thisGameName = topGames.top[0].game.name // 設定起始的遊戲名稱
@@ -57,10 +68,15 @@ function queryTopStreams(gameName, offset = 0) {
       console.error('status: ', req.status) // 顯示 500 錯誤
     }
   }
+  req.addEventListener('loadend', (e) => {
+    console.log('queryTopStreams loadend')
+    toggleLoadingStatus()
+  })
   req.open('GET', `https://api.twitch.tv/kraken/streams/?game=${encodeURI(gameName)}&language=zh&limit=20&offset=${offset}`)
   req.setRequestHeader('Accept', 'application/vnd.twitchtv.v5+json')
   req.setRequestHeader('Client-ID', 'it0f8c9ly6exspcpzp4chgtniiyoay')
   req.send()
+  toggleLoadingStatus()
 }
 
 // load json to streamElem, append streamElem to div.streams
@@ -116,6 +132,11 @@ function checkNoMoreStream(streamCount) {
   }
 }
 
+// #utility  切換頁面 loading 狀態
+function toggleLoadingStatus() {
+  document.querySelector('body').toggleAttribute('loading')
+}
+
 // 初始頁面查詢熱門實況內容，對 queryTopStreams() 的封裝，非事件觸發
 function initTopStreams() {
   console.log('initTopStreams')
@@ -131,6 +152,9 @@ function queryOtherGame(e) {
   if (e.target.matches('.game') && thisGameName !== e.target.innerText) { // 必須是不同的遊戲
     clearAllStreamElems() // 清空實況列表
     thisGameName = e.target.innerText // thisGameName 是全域變數，設定目前選取的遊戲名稱
+    activedGameElem.classList.remove('active') // 取消遊戲選取的狀態
+    e.target.classList.add('active') // 加入選取狀態
+    activedGameElem = e.target // 切換目前選取的遊戲元素
     queryTopStreams(thisGameName)
   }
 }
@@ -151,5 +175,6 @@ function init() {
   queryTopGame()
 }
 
-let thisGameName // 紀錄目前選取的遊戲
+let activedGameElem // 紀錄目前選取的遊戲元素
+let thisGameName // 紀錄目前選取的遊戲名稱
 document.addEventListener('DOMContentLoaded', init)

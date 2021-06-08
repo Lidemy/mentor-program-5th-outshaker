@@ -16,6 +16,38 @@ body {
   background-color: black;
 }
 
+body > .loading { display:none; }
+body[loading] > .loading { display:block; }
+
+.loading {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10;
+}
+
+.loading::before {
+  position: absolute;
+  content: "";
+  background-color: rgba(0,0,0,0.4);
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.loading-img {
+  position: fixed;
+  background: url(../img/loading.svg) center/cover no-repeat;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 11;
+  margin: 0;
+  width: 100px;
+  height: 100px;
+}
+
 nav {
   text-align: right;
 }
@@ -44,6 +76,10 @@ nav {
   text-align: center;
   background-color: #064420;
   color: white;
+}
+
+.game.active {
+  background-color: #4b8818;
 }
 
 .game:hover {
