@@ -15,6 +15,38 @@ body {
   font-family: "Microsoft JhengHei+Questrial";
 }
 
+body > .loading { display:none; }
+body[loading] > .loading { display:block; }
+
+.loading {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10;
+}
+
+.loading::before {
+  position: absolute;
+  content: "";
+  background-color: rgba(0,0,0,0.4);
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.loading-img {
+  position: fixed;
+  background: url(../img/loading.gif) center/cover no-repeat;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 11;
+  margin: 0;
+  width: 100px;
+  height: 100px;
+}
+
 .wrap {
   position: relative;
   max-width: 1903px; /* for 1920 px screen */
@@ -139,14 +171,31 @@ a:hover {
   color: #322929;
 }
 
-.lottery-dialog-btn-draw {
-  margin: 36px 50px 0;
-  padding: 18px 0;
+.btn {
+  text-align: center;
+  font-size: 20px;
   border-radius: 8px;
   background-color: #e62a45;
   color: white;
-  font-size: 20px;
+  user-select: none;
   cursor: pointer;
+  transition-duration: 0.3s; /* release btn */
+}
+
+.btn:hover {
+  background-color: #ff7286;
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+.btn:active {
+  box-shadow: 7px 6px 28px 1px rgba(0, 0, 0, 0.24);
+  transform: translateY(4px);
+  transition-duration: 0.1s; /* active btn */
+}
+
+.lottery-dialog-btn-draw {
+  margin: 36px 50px 0;
+  padding: 18px 0;
 }
 
 .lottery-result {
@@ -159,6 +208,7 @@ a:hover {
 }
 
 .cheers-text {
+  user-select: none;
   font-size: 36px;
   color: #292222;
 }
@@ -172,12 +222,6 @@ a:hover {
   /* height: 55px; */
   margin: 55px auto;
   padding: 18px 0;
-  text-align: center;
-  font-size: 20px;
-  border-radius: 8px;
-  background-color: #e62a45;
-  color: white;
-  cursor: pointer;
 }
 
 /* footer */
@@ -236,6 +280,14 @@ a:hover {
     padding: 1em 0.2em;
   }
   
+  .lottery {
+    height: 100vw;
+  }
+  
+  .lottery-result {
+    top: 25%;
+  }
+  
   .lottery-dialog {
     width: auto;
   }
@@ -252,6 +304,7 @@ a:hover {
   
   .btn-back {
     width: auto;
+    margin: 0.5em auto;
   }
   
   .container {

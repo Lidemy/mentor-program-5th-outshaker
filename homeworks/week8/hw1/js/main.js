@@ -26,12 +26,23 @@ function draw() {
       alert('系統不穩定，請再試一次')
     }
   }
+  req.addEventListener('loadend', (e) => {
+    console.log('loadend')
+    document.querySelector('.lottery-dialog-btn-draw').addEventListener('click', draw, { once: true })
+    toggleLoadingStatus()
+  })
   req.open('GET', 'https://dvwhnbka7d.execute-api.us-east-1.amazonaws.com/default/lottery')
   req.send()
+  toggleLoadingStatus()
 }
 
 function go(key) {
   console.log(`go to ${key}`)
+
+  // test utility: go(0) => go('NONE')
+  if (key >= 0 && key < 4) {
+    key = ['NONE', 'FIRST', 'SECOND', 'THIRD'][key]
+  }
   if (!['FIRST', 'SECOND', 'THIRD', 'NONE'].includes(key)) {
     console.error(key, 'no exist')
     return
@@ -39,13 +50,6 @@ function go(key) {
   document.querySelector('.lottery').classList.remove('init')
   document.querySelector('.lottery').setAttribute('key', key)
   document.querySelector('.cheers-text').innerText = prizeStrings[key]
-
-  /* if (key === 'NONE') {
-    document.querySelector('.cheers-text').classList.add('prize-none')
-    document.querySelector('.lottery').classList.add('prize-none')
-  } else {
-    document.querySelector('.lottery').style.backgroundImage = `url(${prizeImage[key]})`
-  } */
 }
 
 function back() {
@@ -56,8 +60,12 @@ function back() {
 }
 
 function init() {
-  document.querySelector('.lottery-dialog-btn-draw').addEventListener('click', draw)
+  document.querySelector('.lottery-dialog-btn-draw').addEventListener('click', draw, { once: true })
   document.querySelector('.btn-back').addEventListener('click', back)
+}
+
+function toggleLoadingStatus() {
+  document.querySelector('body').toggleAttribute('loading')
 }
 
 let key
