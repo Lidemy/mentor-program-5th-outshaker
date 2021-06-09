@@ -166,7 +166,7 @@ nav {
   overflow: hidden;
 }
 
-#btn-moreGame {
+#btn-moreStreams {
   max-width: 300px;
   margin: 0 auto;
   padding: 1em;
@@ -180,7 +180,7 @@ nav {
   display: none;
 }
 
-#btn-moreGame:hover {
+#btn-moreStreams:hover {
   background-color: #4b8818;
   cursor: pointer;
 }

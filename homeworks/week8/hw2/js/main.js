@@ -121,7 +121,7 @@ function clearAllStreamElems() {
 
 // #utility 檢查是否還有剩餘資料？有的話就顯示「載入更多」按鈕
 function checkNoMoreStream(streamCount) {
-  const btn = document.querySelector('#btn-moreGame')
+  const btn = document.querySelector('#btn-moreStreams')
   if (streamCount <= 19) {
     btn.style.display = 'none'
   } else {
@@ -159,9 +159,9 @@ function queryOtherGame(e) {
   }
 }
 
-// 「載入更多」 查詢熱門實況內容，對 queryTopStreams() 的封裝，由 div#btn-moreGame onclick 觸發
-function moreGame(e) {
-  console.log('moreGame')
+// 「載入更多」 查詢熱門實況內容，對 queryTopStreams() 的封裝，由 div#btn-moreStreams onclick 觸發
+function moreStreams(e) {
+  console.log('moreStreams')
   const offset = document.querySelector('.streams').childElementCount // 計算目前載入的實況卡片數量
   console.log('thisGameName', thisGameName)
   console.log('offset', offset)
@@ -171,7 +171,7 @@ function moreGame(e) {
 // 頁面初始化
 function init() {
   document.querySelector('.games').addEventListener('click', queryOtherGame)
-  document.querySelector('#btn-moreGame').addEventListener('click', moreGame)
+  document.querySelector('#btn-moreStreams').addEventListener('click', moreStreams)
   queryTopGame()
 }
 
