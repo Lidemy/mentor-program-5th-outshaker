@@ -1,0 +1,211 @@
+@font-face {
+  font-family: "Microsoft JhengHei+Questrial";
+  src: local("微軟正黑體"), local("Microsoft JhengHei"), local("Heiti TC");
+  unicode-range: U+4E00-9FFF;
+}
+
+@font-face {
+  font-family: "Microsoft JhengHei+Questrial";
+  src: local(Questrial), local(Helvetica), local(Segoe UI);
+  unicode-range: U+00-024F;
+}
+
+body {
+  text-align: center;
+  font-family: "Microsoft JhengHei+Questrial";
+  background-color: black;
+}
+
+body > .loading { display:none; }
+body[loading] > .loading { display:block; }
+
+.loading {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10;
+}
+
+.loading::before {
+  position: absolute;
+  content: "";
+  background-color: rgba(0,0,0,0.4);
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.loading-img {
+  position: fixed;
+  background: url(../img/loading.svg) center/cover no-repeat;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 11;
+  margin: 0;
+  width: 100px;
+  height: 100px;
+}
+
+nav {
+  text-align: right;
+}
+
+.title {
+  color: #eee;
+}
+
+.games {
+  margin: 0;
+  padding: 0;
+  visibility: hidden;
+  transition: visibility 1s;
+}
+
+.game {
+  display: inline-block;
+  max-width: 300px;
+  margin: 0 0.3em;
+  padding: 1em;
+  text-overflow: ellipsis;
+  line-height: 1.5em;
+  border-radius: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  background-color: #064420;
+  color: white;
+}
+
+.game.active {
+  background-color: #4b8818;
+}
+
+.game:hover {
+  background-color: #4b8818;
+  cursor: pointer;
+}
+
+.streams {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 85%;
+  min-width: 1280px;
+  margin: 0 auto;
+  padding: 1em;
+}
+
+.stream {
+  box-sizing: border-box;
+  border: 2.5px solid black;
+  /* flex-basis: 20%; */
+  width: 20%;
+  transition: border .2s;
+}
+
+.stream:hover {
+  border: 2.5px solid #B1D10A;
+}
+
+.stream a {
+  text-decoration: none;
+  color: white;
+}
+
+.stream a:hover {
+  color: #a970ff;
+}
+
+.stream-cover {
+}
+
+.stream-cover img {
+  max-width: 100%;
+}
+
+.stream-bottom {
+  display: flex;
+  margin-top: .5em;
+  background-color: #0e0e10;
+  text-align: left;
+}
+
+.stream-avater {
+  display: inline-block;
+}
+
+.stream-avater img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.stream-info {
+  vertical-align: top;
+  margin-left: .5em;
+  min-width: 0; /* fix min-width: auto problem */
+}
+
+.stream-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stream-host_name {
+  font-size: 14px;
+  color: white;
+  margin-top: .5em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+#btn-moreStreams {
+  max-width: 300px;
+  margin: 0 auto;
+  padding: 1em;
+  line-height: 1.5em;
+  border-radius: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  background-color: #064420;
+  color: white;
+  display: none;
+}
+
+#btn-moreStreams:hover {
+  background-color: #4b8818;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 1280px) {
+  .streams {
+    max-width: initial;
+    min-width: initial;
+    margin: 0 auto;
+    padding: 0;
+    justify-content: center;
+  }
+  .stream {
+    flex: 0 1 320px;
+  }
+}
+
+@media screen and (max-width: 780px) {
+  .stream-cover img {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .game {
+    display: block;
+    margin: 0.2em auto;
+  }
