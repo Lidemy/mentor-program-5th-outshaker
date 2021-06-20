@@ -1,9 +1,8 @@
 <?php
-  require_once('conn.php');
   require_once('util.php');
   
   if(isLogin()) { // 已登入
-    $username = getUsernameFromToken($conn, $_COOKIE['token']);
+    $username = getUsername();
   // if(false) { // debug
     echo <<<BLOCK
     <form method="POST" action="cmd_add_comment.php" class="add-comment-form">
