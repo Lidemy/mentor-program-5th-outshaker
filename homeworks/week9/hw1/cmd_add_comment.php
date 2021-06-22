@@ -1,4 +1,6 @@
 <?php
+  session_start();
   require_once('util.php');
-  addComment();
+  add_comment();
+  session_commit();
 ?>

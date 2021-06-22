@@ -1,29 +1,25 @@
 <?php
   require_once("conn.php");
   
-  function isLogin() {return !empty($_COOKIE['token']); }
-
-  function generateToken() {
-    $s = '';
-    for($i=1; $i<=16; $i++) {
-      $s .= chr(rand(65,90));
-    }
-    return $s;
-  }
-  
-  function setToken($username) {
-    global $conn;
-    $token = generateToken();
-    $sql = "insert into `sixwings-tokens` (token,username) values('{$token}', '{$username}')";
-    $result = $conn->query($sql);
-    if (!$result) {
-      die($conn->error);
-    }
-    $expire = time() + 3600 * 24 * 14; // 14 days
-    setcookie('token', $token, $expire);
+  function is_session_started() {
+    // error_log("is_session_started(), ".session_id()."\n", 3, "debug.log");
+    return session_status() === PHP_SESSION_ACTIVE;
   }
 
-  function _queryRow($sql_fmt, $key) {
+  function is_login() {
+    return is_session_started() && isset($_SESSION) && !empty($_SESSION['username']);
+  }
+
+  function set_session_username($username) {
+    // error_log("set_session_username(".$username.")\n", 3, "debug.log");
+    if (is_session_started()) {
+      // error_log("is_session_started\n", 3, "debug.log");
+      $_SESSION['username'] = $username;
+      // error_log("\$_SESSION['username'] = (".$_SESSION['username'].")\n", 3, "debug.log");
+    }
+  }
+
+  function _query_row($sql_fmt, $key) {
     global $conn;
     $sql = sprintf($sql_fmt, $key);
     $result = $conn->query($sql);
@@ -31,25 +27,18 @@
   }
   
   // username => user
-  function getUserFromUsername($username) {
+  function get_user_from_username($username) {
     global $conn;
     $sql_fmt = "select * from `sixwings-users` where username = '%s' limit 1;";
-    return _queryRow($sql_fmt, $username);
+    return _query_row($sql_fmt, $username);
   }
 
-  // token => username
-  function getUsername() {
-    if(!isLogin()) {
-      return false;
-    }
-    global $conn;
-    $sql_fmt = "select username from `sixwings-tokens` where token = '%s' limit 1;";
-    $token = $_COOKIE['token'];
-    $row = _queryRow($sql_fmt, $token);
-    return ($row) ? $row['username'] : false;
+  // session => username
+  function get_username() {
+    return is_login() ? $_SESSION['username'] : '';
   }
 
-  function addUser() {
+  function add_user() {
     if (
       empty($_POST['nickname']) ||
       empty($_POST['username']) ||
@@ -68,17 +57,18 @@
       header("Location: register.php?errCode=2");
       die($conn->error);
     }
-    header("Location: index.php");
+    login();
   }
   
   // token => username => user
-  function getUser() {
-    $username = getUsername();
-    return ($username) ? getUserFromUsername($username) : false;
+  function get_user() {
+    $username = get_username();
+    return ($username) ? get_user_from_username($username) : false;
   }
   
   function login() {
-    if (isLogin()) {
+    if (!is_session_started()) {
+      // error_log("session is not started\n", 3, "debug.log");
       return;
     }
     // 檢查是否有輸入資料
@@ -86,7 +76,6 @@
       header("Location: login.php?errCode=1");
       die('some column is empty');
     }
-    
     global $conn;
     $username = $_POST['username'];
     $pass = $_POST['pass'];
@@ -96,22 +85,21 @@
       header("Location: login.php?errCode=2");
       die('無此帳號或密碼錯誤');
     }
-    setToken($username);
-    // header("Location: login.php"); // debug
-    header("Location: index.php");
-  }
-  
-  function logout() {
-    if(!isLogin()) {
-      die('no login');
-    }
-    $expire = time() - 3600;
-    setcookie('token', '', $expire);
+    set_session_username($username);
+    echo $_SESSION['username'];
     header("Location: index.php");
   }
 
-  function addComment() {
-    if(!isLogin()) {
+  function logout() {
+    if(!is_login()) {
+      die('no login');
+    }
+    session_destroy(); // 清空內容，但 cookie 仍然保留 session_id
+    header("Location: index.php");
+  }
+
+  function add_comment() {
+    if(!is_login()) {
       die('no login');
     }
     if (empty($_POST['content'])) { //檢查是否有輸入資料
@@ -119,7 +107,7 @@
       die('請輸入 content');
     }
     global $conn;
-    $username = getUsername();
+    $username = get_username();
     $content = $_POST['content'];
     $sql = "insert into `sixwings-comments` (username, content, created_at) values('{$username}','{$content}', now())";
     $result = $conn->query($sql);
@@ -129,7 +117,7 @@
     header("Location: index.php");
   }
 
-  function getComments() {
+  function get_comments() {
     global $conn;
     $sql = "SELECT * FROM `sixwings-comments` order by created_at desc";
     $result = $conn->query($sql);

@@ -1,6 +1,6 @@
 <?php
   require_once('util.php');
-  if(isLogin()) { // 已登入
+  if(is_login()) { // 已登入
   // if(false) { // debug
     echo <<<BLOCK
     <div class="login-block">
@@ -10,7 +10,7 @@ BLOCK;
   } else { // 未登入
     echo <<<BLOCK
     <div class="login-block">
-      <a href="regist.php" class="btn">註冊</a>
+      <a href="register.php" class="btn">註冊</a>
       <a href="login.php" class="btn">登入</a>
     </div>
 BLOCK;

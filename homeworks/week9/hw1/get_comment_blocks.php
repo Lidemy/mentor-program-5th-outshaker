@@ -1,6 +1,6 @@
 <?php
   require_once('util.php');
-  $result = getComments();
+  $result = get_comments();
   while ($row = $result->fetch_assoc()) { // 逐行讀取資料
     echo <<<BLOCK
       <div class="comment">

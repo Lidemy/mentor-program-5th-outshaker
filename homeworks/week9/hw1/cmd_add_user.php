@@ -1,4 +1,6 @@
 <?php
+  session_start();
   require_once('util.php');
-  addUser();
+  add_user();
+  session_commit();
 ?>
