@@ -2,7 +2,6 @@
   require_once("conn.php");
   
   function is_session_started() {
-    // error_log("is_session_started(), ".session_id()."\n", 3, "debug.log");
     return session_status() === PHP_SESSION_ACTIVE;
   }
 
@@ -11,26 +10,17 @@
   }
 
   function set_session_username($username) {
-    // error_log("set_session_username(".$username.")\n", 3, "debug.log");
     if (is_session_started()) {
-      // error_log("is_session_started\n", 3, "debug.log");
       $_SESSION['username'] = $username;
-      // error_log("\$_SESSION['username'] = (".$_SESSION['username'].")\n", 3, "debug.log");
     }
   }
 
-  function _query_row($sql_fmt, $key) {
-    global $conn;
-    $sql = sprintf($sql_fmt, $key);
-    $result = $conn->query($sql);
-    return ($result) ? $result->fetch_assoc() : false;
-  }
-  
   // username => user
   function get_user_from_username($username) {
     global $conn;
-    $sql_fmt = "select * from `sixwings-users` where username = '%s' limit 1;";
-    return _query_row($sql_fmt, $username);
+    $sql = "SELECT * FROM `sixwings-users` WHERE username = '{$username}' LIMIT 1;";
+    $result = $conn->query($sql);
+    return ($result) ? $result->fetch_assoc() : false;    
   }
 
   // session => username
@@ -51,7 +41,7 @@
     $nickname = $_POST['nickname'];
     $username = $_POST['username'];
     $pass = $_POST['pass'];
-    $sql = "insert into `sixwings-users` (nickname, username, pass, created_at) values('{$nickname}','{$username}', '{$pass}', now())";
+    $sql = "INSERT INTO `sixwings-users` (nickname, username, pass, created_at) VALUES ('{$nickname}','{$username}', '{$pass}', now())";
     $result = $conn->query($sql);
     if (!$result) {
       header("Location: register.php?errCode=2");
@@ -60,7 +50,7 @@
     login();
   }
   
-  // token => username => user
+  // session => username => user
   function get_user() {
     $username = get_username();
     return ($username) ? get_user_from_username($username) : false;
@@ -68,7 +58,6 @@
   
   function login() {
     if (!is_session_started()) {
-      // error_log("session is not started\n", 3, "debug.log");
       return;
     }
     // 檢查是否有輸入資料
@@ -79,7 +68,7 @@
     global $conn;
     $username = $_POST['username'];
     $pass = $_POST['pass'];
-    $sql = "SELECT * FROM `sixwings-users` WHERE `username` = '{$username}' AND `pass` = '{$pass}'";
+    $sql = "SELECT * FROM `sixwings-users` WHERE `username` = '{$username}' AND `pass` = '{$pass}' LIMIT 1";
     $result = $conn->query($sql);
     if ($result->num_rows === 0) {
       header("Location: login.php?errCode=2");
@@ -109,7 +98,7 @@
     global $conn;
     $username = get_username();
     $content = $_POST['content'];
-    $sql = "insert into `sixwings-comments` (username, content, created_at) values('{$username}','{$content}', now())";
+    $sql = "INSERT INTO `sixwings-comments` (username, content, created_at) VALUES ('{$username}','{$content}', now())";
     $result = $conn->query($sql);
     if (!$result) {
       die($conn->error);
@@ -119,13 +108,11 @@
 
   function get_comments() {
     global $conn;
-    $sql = "SELECT * FROM `sixwings-comments` order by created_at desc";
+    $sql = "SELECT * FROM `sixwings-comments` ORDER BY created_at DESC";
     $result = $conn->query($sql);
-    // print_r($result); // 沒辦法印 false
-    // var_dump($result); // 可以印 false, 但正常時候資料比較雜
     
-    if (!$result) { // 連線錯誤會到這邊
-      die($conn->error); // 不會執行下去，然後輸出錯誤訊息
+    if (!$result) {
+      die($conn->error);
     }
     return $result;
   }
