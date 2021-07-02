@@ -40,7 +40,7 @@
     global $conn;
     $nickname = $_POST['nickname'];
     $username = $_POST['username'];
-    $pass = $_POST['pass'];
+    $pass = password_hash($_POST['pass'], PASSWORD_DEFAULT);
     $sql = "INSERT INTO `sixwings-users` (nickname, username, pass, created_at) VALUES ('{$nickname}','{$username}', '{$pass}', now())";
     $result = $conn->query($sql);
     if (!$result) {
@@ -68,14 +68,18 @@
     global $conn;
     $username = $_POST['username'];
     $pass = $_POST['pass'];
-    $sql = "SELECT * FROM `sixwings-users` WHERE `username` = '{$username}' AND `pass` = '{$pass}' LIMIT 1";
+    $sql = "SELECT `pass` FROM `sixwings-users` WHERE `username` = '{$username}' LIMIT 1";
     $result = $conn->query($sql);
-    if ($result->num_rows === 0) {
-      header("Location: login.php?errCode=2");
-      die('無此帳號或密碼錯誤');
+    if (!$result || $result->num_rows === 0) { // 把 $result == false 的情況也過濾掉
+      header("Location: login.php?errCode=2"); // 查無帳號
+      die();
+    }
+    $row = $result->fetch_assoc();
+    if (!password_verify($pass, $row['pass'])) {
+      header("Location: login.php?errCode=2"); // 密碼錯誤
+      die();
     }
     set_session_username($username);
-    echo $_SESSION['username'];
     header("Location: index.php");
   }
 
