@@ -19,9 +19,11 @@
   // username => user
   function get_user_from_username($username) {
     global $conn;
-    $sql = "SELECT * FROM `sixwings-users` WHERE username = '{$username}' LIMIT 1;";
-    $result = $conn->query($sql);
-    return ($result) ? $result->fetch_assoc() : false;    
+    $sql = "SELECT * FROM `sixwings-users` WHERE username = ? LIMIT 1;";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('s', $username);
+    $result = $stmt->execute();
+    return ($result) ? $stmt->get_result() : false;
   }
 
   // session => username
@@ -42,8 +44,10 @@
     $nickname = $_POST['nickname'];
     $username = $_POST['username'];
     $pass = password_hash($_POST['pass'], PASSWORD_DEFAULT);
-    $sql = "INSERT INTO `sixwings-users` (nickname, username, pass, created_at) VALUES ('{$nickname}','{$username}', '{$pass}', now())";
-    $result = $conn->query($sql);
+    $sql = "INSERT INTO `sixwings-users` (nickname, username, pass) VALUES (?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('sss', $nickname, $username, $pass);
+    $result = $stmt->execute();
     if (!$result) {
       header("Location: register.php?errCode=2");
       die($conn->error);
@@ -69,8 +73,11 @@
     global $conn;
     $username = $_POST['username'];
     $pass = $_POST['pass'];
-    $sql = "SELECT `id`, `pass` FROM `sixwings-users` WHERE `username` = '{$username}' LIMIT 1";
-    $result = $conn->query($sql);
+    $sql = "SELECT `id`, `pass` FROM `sixwings-users` WHERE `username` = ? LIMIT 1";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('s', $username);
+    $result = $stmt->execute();
+    $result = ($result) ? $stmt->get_result() : false;
     if (!$result || $result->num_rows === 0) { // 把 $result == false 的情況也過濾掉
       header("Location: login.php?errCode=2"); // 查無帳號
       die();
@@ -104,9 +111,12 @@
     $username = $_SESSION['username'];
     $user_id = $_SESSION['user_id'];
     $content = $_POST['content'];
-    $sql = "INSERT INTO `sixwings-comments` (user_id, content) VALUES ('{$user_id}','{$content}');";
-    $result = $conn->query($sql);
+    $sql = "INSERT INTO `sixwings-comments` (user_id, content) VALUES (?, ?);";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('ss', $user_id, $content);
+    $result = $stmt->execute();
     if (!$result) {
+      header("Location: index.php?errCode=2");
       die($conn->error);
     }
     header("Location: index.php");
@@ -121,7 +131,6 @@
       ORDER BY C.id DESC
     BLOCK;
     $result = $conn->query($sql);
-    
     if (!$result) {
       die($conn->error);
     }
