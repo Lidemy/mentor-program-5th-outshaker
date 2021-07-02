@@ -1,7 +1,6 @@
 <?php
   require_once('util.php');
   if(is_login()) { // 已登入
-  // if(false) { // debug
     echo <<<BLOCK
     <div class="login-block">
       <a href="cmd_logout.php" class="btn">登出</a>

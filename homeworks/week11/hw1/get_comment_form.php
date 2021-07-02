@@ -3,7 +3,7 @@
   
   if(is_login()) { // 已登入
     $username = get_username();
-  // if(false) { // debug
+    $username = escape($username);
     echo <<<BLOCK
     <form method="POST" action="cmd_add_comment.php" class="add-comment-form">
       <div class="input-block">
