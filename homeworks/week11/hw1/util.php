@@ -23,7 +23,7 @@
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('s', $username);
     $result = $stmt->execute();
-    return ($result) ? $stmt->get_result() : false;
+    return ($result) ? $stmt->get_result()->fetch_assoc() : false;
   }
 
   // session => username
