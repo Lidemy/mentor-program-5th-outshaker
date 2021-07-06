@@ -79,12 +79,12 @@
     $result = $stmt->execute();
     $result = ($result) ? $stmt->get_result() : false;
     if (!$result || $result->num_rows === 0) { // 把 $result == false 的情況也過濾掉
-      header("Location: login.php?errCode=2"); // 查無帳號
+      header("Location: login.php?errCode=10"); // 查無帳號
       die();
     }
     $row = $result->fetch_assoc();
     if (!password_verify($pass, $row['pass'])) {
-      header("Location: login.php?errCode=2"); // 密碼錯誤
+      header("Location: login.php?errCode=10"); // 密碼錯誤
       die();
     }
     set_user_session($username, $row['id']);
@@ -97,6 +97,25 @@
     }
     session_destroy(); // 清空內容，但 cookie 仍然保留 session_id
     header("Location: index.php");
+  }
+
+  function get_role() {
+    global $conn;
+    $user_id = (is_login()) ? $_SESSION['user_id'] : 0; // 0: guest user
+    $sql = <<<BLOCK
+      SELECT U.id AS viewer_id, role_name, edit_range, del_range
+      FROM `sixwings-roles` AS R
+      JOIN `sixwings-users` AS U
+      ON U.role = R.role_id
+      WHERE U.id = ?;
+BLOCK;
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $user_id);
+    $result = $stmt->execute();
+    if (!$result) {
+      die();
+    }
+    return $stmt->get_result()->fetch_assoc();
   }
 
   function add_comment() {
@@ -125,16 +144,111 @@
   function get_comments() {
     global $conn;
     $sql = <<<BLOCK
-      SELECT U.username, U.nickname, C.content, C.created_at
-      FROM `sixwings-comments` AS C LEFT JOIN `sixwings-users` AS U
-      ON C.user_id = U.id
+      SELECT *
+      FROM `sixwings-v_comments` AS C
       ORDER BY C.id DESC
-    BLOCK;
-    $result = $conn->query($sql);
+BLOCK;
+    $stmt = $conn->prepare($sql);
+    $result = $stmt->execute();
     if (!$result) {
-      die($conn->error);
+      die();
     }
-    return $result;
+    return $stmt->get_result();
+  }
+  
+  function get_comment($id) {
+    global $conn;
+    $sql = <<<BLOCK
+      SELECT *
+      FROM `sixwings-v_comments` AS C
+      WHERE C.id = ?
+BLOCK;
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $id);
+    $result = $stmt->execute();
+    if (!$result) {
+      return false;
+    }
+    $result = $stmt->get_result();
+    return ($result && $result->num_rows > 0) ? $result->fetch_assoc() : false;
+  }
+  
+  function edit_comment() {
+    if(!is_login()) {
+      header("Location: index.php?errCode=0");
+      die();
+    }
+    if (empty($_POST['id']) || empty($_POST['content'])) { //檢查是否有輸入資料
+      header("Location: index.php?errCode=5");
+      die();
+    }
+    global $conn;
+    $role = get_role();
+    $comment = get_comment($_POST['id']);
+    if (!$comment) {
+      header("Location: index.php?errCode=4");
+      die();
+    }
+    if (($role['viewer_id'] !== $comment['owner_id'] && $role['edit_range'] === 'OWN') || ($role['edit_range'] === 'NONE')) {
+      header("Location: index.php?errCode=2");
+      die();
+    }
+
+    $id = $_POST['id'];
+    $content = $_POST['content'];
+    $sql = <<<BLOCK
+      UPDATE `sixwings-comments` AS C
+      SET C.content = ?
+      WHERE C.is_del = 0 AND C.id = ?;
+BLOCK;
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('si',$content, $id);
+    $result = $stmt->execute();
+    if (!$result) {
+      // TODO 一致性的錯誤處理
+      die();
+    }
+    header("Location: index.php");
+  }
+
+  function del_comment() {
+    if(!is_login()) {
+      header("Location: index.php?errCode=0");
+      die();
+    }
+    if (empty($_GET['id'])) { //檢查是否有輸入資料
+      header("Location: index.php?errCode=5");
+      die();
+    }
+    global $conn;
+    $role = get_role();
+    $comment = get_comment($_GET['id']);
+    if (!$comment) {
+      header("Location: index.php?errCode=4");
+      die();
+    }
+    if (($role['viewer_id'] !== $comment['owner_id'] && $role['del_range'] === 'OWN') || ($role['del_range'] === 'NONE')) {
+      header("Location: index.php?errCode=3");
+      die();
+    }
+
+    $id = $_GET['id'];
+    $sql = <<<BLOCK
+      UPDATE `sixwings-comments` AS C
+      SET C.is_del = 1
+      WHERE C.is_del = 0 AND C.id = ?;
+BLOCK;
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $id);
+    $result = $stmt->execute();
+    if (!$result) {
+      // TODO 一致性的錯誤處理
+      die();
+    }
+    if ($stmt->affected_rows === 0) {
+      header("Location: index.php?errCode=4");
+    }
+    header("Location: index.php");
   }
 
   // 轉義文字: 防止 XSS

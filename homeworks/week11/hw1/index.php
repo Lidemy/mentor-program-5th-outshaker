@@ -14,8 +14,20 @@
     <?php
       if(isset($_GET['errCode'])){
         switch($_GET['errCode']){
+          case '0':
+            echo '    <h1 class="error">錯誤：未登入的操作</h1>';break;
           case '1':
             echo '    <h1 class="error">錯誤：未輸入暱稱或內容。</h1>';break;
+          case '10':
+            echo '    <h1 class="error">錯誤：帳號資訊錯誤</h1>';break;
+          case '2':
+            echo '    <h1 class="error">錯誤：你沒有修改留言的權限。</h1>';break;
+          case '3':
+            echo '    <h1 class="error">錯誤：你沒有刪除留言的權限。</h1>';break;
+          case '4':
+            echo '    <h1 class="error">錯誤：此留言並不存在。</h1>';break;
+          case '5':
+            echo '    <h1 class="error">錯誤：未輸入參數。</h1>';break;
         }
       }
     ?>
@@ -39,5 +51,16 @@
       </div> -->
     </div>
   </main>
+  <script>
+    const del_btns = [...document.querySelectorAll('.del_btn')]
+    del_btns.forEach((ele) => {
+      ele.addEventListener("click", (ev) => {
+        if (confirm("確定要刪除嗎？")) {
+          ev.preventDefault()
+        }
+        return
+      })
+    })
+  </script>
 </body>
 </html>
