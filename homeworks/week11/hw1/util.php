@@ -148,12 +148,11 @@ BLOCK;
       FROM `sixwings-v_comments` AS C
       ORDER BY C.id DESC
 BLOCK;
-    $stmt = $conn->prepare($sql);
-    $result = $stmt->execute();
+    $result = $conn->query($sql);
     if (!$result) {
-      die();
+      die('no result');
     }
-    return $stmt->get_result();
+    return $result;
   }
   
   function get_comment($id) {
