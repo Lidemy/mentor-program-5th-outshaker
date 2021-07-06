@@ -7,10 +7,10 @@ SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 
 SET NAMES utf8mb4;
 
-CREATE DATABASE `demo` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
-USE `demo`;
+CREATE DATABASE IF NOT EXISTS `mtr04group5` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
+USE `mtr04group5`;
 
-CREATE TABLE `sixwings-comments` (
+CREATE TABLE IF NOT EXISTS `sixwings-comments` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '流水號',
   `user_id` int(10) unsigned NOT NULL COMMENT '使用者編號',
   `content` text NOT NULL COMMENT '內容',
@@ -20,7 +20,7 @@ CREATE TABLE `sixwings-comments` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
-CREATE TABLE `sixwings-roles` (
+CREATE TABLE IF NOT EXISTS `sixwings-roles` (
   `role_id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT COMMENT '角色編號',
   `role_name` varchar(32) NOT NULL COMMENT '角色名稱',
   `add` tinyint(4) NOT NULL DEFAULT 1 COMMENT '可否新增留言',
@@ -30,7 +30,7 @@ CREATE TABLE `sixwings-roles` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
-CREATE TABLE `sixwings-users` (
+CREATE TABLE IF NOT EXISTS `sixwings-users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '流水號',
   `role` tinyint(3) unsigned NOT NULL DEFAULT 2 COMMENT '身分',
   `nickname` varchar(64) NOT NULL COMMENT '暱稱',
@@ -42,7 +42,7 @@ CREATE TABLE `sixwings-users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
-CREATE TABLE `sixwings-v_comments` (`id` int(10) unsigned, `owner_id` int(10) unsigned, `username` varchar(64), `nickname` varchar(64), `content` text, `created_at` datetime);
+CREATE TABLE IF NOT EXISTS `sixwings-v_comments` (`id` int(10) unsigned, `owner_id` int(10) unsigned, `username` varchar(64), `nickname` varchar(64), `content` text, `created_at` datetime);
 
 
 DROP TABLE IF EXISTS `sixwings-v_comments`;

@@ -101,7 +101,7 @@
 
   function get_role() {
     global $conn;
-    $user_id = (is_login()) ? $_SESSION['user_id'] : 0; // 0: guest user
+    $user_id = (is_login()) ? $_SESSION['user_id'] : 1; // 1: guest user
     $sql = <<<BLOCK
       SELECT U.id AS viewer_id, role_name, edit_range, del_range
       FROM `sixwings-roles` AS R
