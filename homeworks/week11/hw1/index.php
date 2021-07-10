@@ -55,7 +55,7 @@
     const del_btns = [...document.querySelectorAll('.del_btn')]
     del_btns.forEach((ele) => {
       ele.addEventListener("click", (ev) => {
-        if (confirm("確定要刪除嗎？")) {
+        if (!confirm("確定要刪除嗎？")) {
           ev.preventDefault()
         }
         return
