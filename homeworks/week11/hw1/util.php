@@ -159,7 +159,15 @@ BLOCK;
     global $conn;
     $sql = <<<BLOCK
       SELECT *
-      FROM `sixwings-v_comments` AS C
+      FROM
+        (SELECT
+          id,
+          owner_id,
+          username,
+          nickname,
+          content,
+          created_at
+        FROM `sixwings-v_comments`) AS C
       WHERE C.id = ?
 BLOCK;
     $stmt = $conn->prepare($sql);
