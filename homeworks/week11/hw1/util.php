@@ -250,6 +250,22 @@ BLOCK;
     header("Location: index.php");
   }
 
+  function get_page_info() {
+    global $conn;
+    $sql = <<<BLOCK
+SELECT
+COUNT(id) AS count,
+CEIL(COUNT(id) / 10) AS num_pages
+FROM `sixwings-comments` WHERE is_del = 0;
+BLOCK;
+    $stmt = $conn->prepare($sql);
+    $result = $stmt->execute();
+    if (!$result) {
+      die('no result');
+    }
+    return $stmt->get_result()->fetch_assoc();
+  }
+
   // 轉義文字: 防止 XSS
   function escape($str) {
     return htmlspecialchars($str, ENT_QUOTES);

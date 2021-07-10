@@ -25,6 +25,7 @@
           <div class="comment-content">{$content}</div>
         </div>
       </div>
+
 BLOCK;
   }
 ?>
