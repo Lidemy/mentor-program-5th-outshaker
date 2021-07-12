@@ -108,7 +108,7 @@
     global $conn;
     $user_id = (is_login()) ? $_SESSION['user_id'] : 1; // 1: guest user
     $sql = <<<BLOCK
-      SELECT U.id AS viewer_id, role_name, edit_range, del_range
+      SELECT U.id AS viewer_id, role_name, can_post, edit_range, del_range
       FROM `sixwings-roles` AS R
       JOIN `sixwings-users` AS U
       ON U.role = R.role_id
@@ -284,7 +284,7 @@ BLOCK;
     }
     global $conn;
     $sql = <<<BLOCK
-      SELECT U.id, U.username, U.nickname, role_id, role_name, `add`, edit_range, del_range
+      SELECT U.id, U.username, U.nickname, role_id, role_name, can_post, edit_range, del_range
       FROM `sixwings-users` AS U
       LEFT JOIN `sixwings-roles` AS R ON R.role_id = U.role
 BLOCK;

@@ -8,7 +8,7 @@
         <td>{$row['username']}</td>
         <td>{$row['nickname']}</td>
         <td>{$row['role_name']}</td>
-        <td>{$row['add']}</td>
+        <td>{$row['can_post']}</td>
         <td>{$row['edit_range']}</td>
         <td>{$row['del_range']}</td>
       </tr>
@@ -35,7 +35,7 @@ ROW;
             <input type="submit" value="update">
           </form>
         </td>
-        <td>{$row['add']}</td>
+        <td>{$row['can_post']}</td>
         <td>{$row['edit_range']}</td>
         <td>{$row['del_range']}</td>
       </tr>
@@ -50,7 +50,7 @@ ROW;
         <th>username</th>
         <th>nickname</th>
         <th>role</th>
-        <th>add</th>
+        <th>can_post</th>
         <th>edit_range</th>
         <th>del_range</th>
       </tr>
