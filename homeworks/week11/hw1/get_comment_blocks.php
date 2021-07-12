@@ -3,7 +3,7 @@
   $page = (isset($_GET['page'])) ? intval($_GET['page']) : 1;
   $result = get_comments($page);
   $role = get_role();
-
+echo "    <div class=\"comments\">\n";
   while ($row = $result->fetch_assoc()) { // 逐行讀取資料
     $nickname = escape($row['nickname']);
     $username = escape($row['username']);
@@ -13,7 +13,6 @@
     $can_del = ($role['viewer_id'] === $row['owner_id'] && $role['del_range'] === 'OWN') || ($role['del_range'] === 'ALL');
     $edit_link = ($can_edit) ? "\n            <a href='edit.php?id={$row['id']}'>編輯</a>" : "";
     $del_link = ($can_del) ? "\n            <a class='del_btn' href='cmd_del.php?id={$row['id']}'>刪除</a>" : "";
-    
     echo <<<BLOCK
       <div class="comment">
         <div class="comment-avatar">
@@ -29,4 +28,5 @@
 
 BLOCK;
   }
+  echo "    </div>\n";
 ?>

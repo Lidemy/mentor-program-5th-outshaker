@@ -35,21 +35,7 @@
     <h1 class="board-title">Comments</h1>
 <?php require('get_comment_form.php'); ?>
     <div class="hr"></div>
-    <div class="comments">
 <?php require('get_comment_blocks.php'); ?>
-      <!-- <div class="comment">
-        <div class="comment-avatar">
-          <img src="" alt="">
-        </div>
-        <div class="comment-body">
-          <div class="comment-info">
-            <span class="comment-username">six</span>
-            <span class="comment-time">2021-06-17 11:00:00</span>
-          </div>
-          <div class="comment-content">Today is a good day to code!</div>
-        </div>
-      </div> -->
-    </div>
 <?php
   require_once('util.php');
   function get_paginator_block() {
@@ -72,6 +58,7 @@ BLOCK;
       return;
     }
     
+    // 第二頁整併兩個分頁按紐
     if ($page === 1) {
       $go_back_block = "";
     } else if ($page === 2) {
@@ -83,6 +70,7 @@ BLOCK;
 BLOCK;
     }
 
+    // 倒數第二頁整併兩個分頁按紐
     if ($page === $num_pages) {
       $go_next_block = "";
     } else if ($page === $num_pages - 1) {
@@ -94,13 +82,11 @@ BLOCK;
 BLOCK;
     }
 
-    if ($num_pages > 1) {
-      echo <<<BLOCK
+    echo <<<BLOCK
       <div class="paginator">{$go_back_block}{$go_next_block}
       </div>
       
 BLOCK;
-    }
   }
   get_paginator_block();
 ?>
