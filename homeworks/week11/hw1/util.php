@@ -330,12 +330,12 @@ BLOCK;
     header("Location: user_management.php");
   }
   
-  function get_page_info() {
+  function get_page_info($page_size = 5) {
     global $conn;
     $sql = <<<BLOCK
 SELECT
 COUNT(id) AS count,
-CEIL(COUNT(id) / 10) AS num_pages
+CEIL(COUNT(id) / {$page_size}) AS num_pages
 FROM `sixwings-comments` WHERE is_del = 0;
 BLOCK;
     $stmt = $conn->prepare($sql);
