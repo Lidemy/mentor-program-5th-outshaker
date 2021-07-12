@@ -42,9 +42,9 @@
     $info = get_page_info();
     $count = $info['count'];
     $num_pages = intval($info['num_pages']);
-    $page = (!empty($_GET['page'])) ? intval($_GET['page']) : 1;
-    if ($page > $num_pages) $page = $num_pages;
-    if ($page < 1) $page = 1;
+    $page = (!empty($_GET['page'])) ? intval($_GET['page']) : 1; // 空值代入預設值
+    if ($page > $num_pages) $page = $num_pages; // 防止頁碼超過
+    if ($page < 1) $page = 1; // 防止負數頁碼
     $pre_page = $page - 1;
     $next_page = $page + 1;
     echo <<<BLOCK
