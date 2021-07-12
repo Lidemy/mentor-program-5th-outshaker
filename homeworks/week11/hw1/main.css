@@ -72,7 +72,8 @@ a.btn {
 
 .login-form input,
 .regist-form input,
-.add-comment-form input {
+.add-comment-form input,
+.update-role-form input {
   border: 1px solid #c2dffb;
 }
 
@@ -157,4 +158,11 @@ a.btn {
   color: #5c9edc;
   border: 1px solid #5c9edc;
   padding: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 2px solid black;
+  text-align: center;
 }

@@ -15,6 +15,11 @@
       $_SESSION['user_id'] = $user_id;
     }
   }
+  
+  function is_admin() {
+    $role = get_role();
+    return is_login() && $role["role_name"] === "admin";
+  }
 
   // username => user
   function get_user_from_username($username) {
@@ -258,6 +263,60 @@ BLOCK;
     header("Location: index.php");
   }
 
+  // #later support paging
+  function get_user_role_info() {
+    if (!is_admin()) {
+      header("Location: index.php"); // 直接返回
+      die();
+    }
+    global $conn;
+    $sql = <<<BLOCK
+      SELECT U.id, U.username, U.nickname, role_id, role_name, `add`, edit_range, del_range
+      FROM `sixwings-users` AS U
+      LEFT JOIN `sixwings-roles` AS R ON R.role_id = U.role
+BLOCK;
+    $result = $conn->query($sql);
+    if (!$result) {
+      die('no result');
+    }
+    return $result;
+  }
+
+  function set_user_role() {
+    if (!is_admin()) {
+      header("Location: index.php"); // 直接返回
+      die();
+    }
+    if (!isset($_POST['role']) ||
+        !isset($_POST['user_id'])) { // 檢查是否有輸入資料
+      header("Location: user_management.php?errCode=1");
+      die();
+    }
+    if (($_POST['user_id']) === "0") { // 無法修改 0 號使用者 (管理者) 帳號身分
+      header("Location: user_management.php?errCode=2");
+      die();
+    }
+    global $conn;
+    $user_id = intval($_POST['user_id']);
+    $role = intval($_POST['role']);
+    $sql = <<<BLOCK
+      UPDATE `sixwings-users` AS U
+      SET U.role = ?
+      WHERE U.id != 0 AND U.id = ?;
+BLOCK;
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('ii', $role, $user_id);
+    $result = $stmt->execute();
+    if (!$result) {
+      // TODO 一致性的錯誤處理
+      die();
+    }
+    if ($stmt->affected_rows === 0) {
+      header("Location: user_management.php?errCode=3");
+    }
+    header("Location: user_management.php");
+  }
+  
   function get_page_info() {
     global $conn;
     $sql = <<<BLOCK
