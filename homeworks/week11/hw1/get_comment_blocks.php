@@ -11,8 +11,8 @@ echo "    <div class=\"comments\">\n";
     $content = escape($row['content']);
     $can_edit = ($role['viewer_id'] === $row['owner_id'] && $role['edit_range'] === 'OWN') || ($role['edit_range'] === 'ALL');
     $can_del = ($role['viewer_id'] === $row['owner_id'] && $role['del_range'] === 'OWN') || ($role['del_range'] === 'ALL');
-    $edit_link = ($can_edit) ? "\n            <a href='edit.php?id={$row['id']}'>編輯</a>" : "";
-    $del_link = ($can_del) ? "\n            <a class='del_btn' href='cmd_del.php?id={$row['id']}'>刪除</a>" : "";
+    $edit_link = ($can_edit) ? "\n            <a href='edit_comment.php?id={$row['id']}'>編輯</a>" : "";
+    $del_link = ($can_del) ? "\n            <a class='del_btn' href='cmd_del_comment.php?id={$row['id']}'>刪除</a>" : "";
     echo <<<BLOCK
       <div class="comment">
         <div class="comment-avatar">

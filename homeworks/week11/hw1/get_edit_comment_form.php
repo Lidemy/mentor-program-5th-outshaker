@@ -24,7 +24,7 @@
   $username = escape($comment['username']);
   $content = escape($comment['content']);
   echo <<<BLOCK
-  <form method="POST" action="cmd_edit.php" class="add-comment-form">
+  <form method="POST" action="cmd_edit_comment.php" class="add-comment-form">
     <input type="hidden" name="id" value={$id}>
     <div class="input-block">
       <strong>{$nickname} ({$username})</strong> 想說：
