@@ -151,23 +151,24 @@ BLOCK;
     $offset = ($page - 1) * $page_size;
     global $conn;
     $sql = <<<BLOCK
-      SELECT *
-      FROM
-        (SELECT
-          id,
-          owner_id,
-          username,
-          nickname,
-          content,
-          created_at
-        FROM `sixwings-v_comments`) AS C
+      SELECT C.id,
+        C.user_id AS owner_id,
+        U.username,
+        U.nickname,
+        C.content,
+        C.created_at
+      FROM `sixwings-users` AS U
+        LEFT JOIN `sixwings-comments` AS C
+        ON U.id = C.user_id
+      WHERE C.is_del = 0
       ORDER BY C.id DESC
-      LIMIT ? OFFSET ?
+      LIMIT ? OFFSET ?;
 BLOCK;
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('ii', $limit, $offset);
     $result = $stmt->execute();
     if (!$result) {
+      error_log("{$stmt->errno}: {$stmt->error}\n", 3, "debug.log");
       return false;
     }
     return $stmt->get_result();
@@ -176,17 +177,16 @@ BLOCK;
   function get_comment($id) {
     global $conn;
     $sql = <<<BLOCK
-      SELECT *
-      FROM
-        (SELECT
-          id,
-          owner_id,
-          username,
-          nickname,
-          content,
-          created_at
-        FROM `sixwings-v_comments`) AS C
-      WHERE C.id = ?
+      SELECT C.id,
+        C.user_id AS owner_id,
+        U.username,
+        U.nickname,
+        C.content,
+        C.created_at
+      FROM `sixwigns-users` AS U
+        LEFT JOIN `sixwings-comments` AS C
+        ON U.id = C.user_id
+      WHERE C.id = ? and C.is_del = 0;
 BLOCK;
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('i', $id);
