@@ -146,20 +146,33 @@ BLOCK;
     header("Location: index.php");
   }
 
-  function get_comments() {
+  function get_comments($page = 1, $page_size = 5) {
+    $limit = $page_size;
+    $offset = ($page - 1) * $page_size;
     global $conn;
     $sql = <<<BLOCK
       SELECT *
-      FROM `sixwings-v_comments` AS C
+      FROM
+        (SELECT
+          id,
+          owner_id,
+          username,
+          nickname,
+          content,
+          created_at
+        FROM `sixwings-v_comments`) AS C
       ORDER BY C.id DESC
+      LIMIT ? OFFSET ?
 BLOCK;
-    $result = $conn->query($sql);
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('ii', $limit, $offset);
+    $result = $stmt->execute();
     if (!$result) {
-      die('no result');
+      return false;
     }
-    return $result;
+    return $stmt->get_result();
   }
-  
+
   function get_comment($id) {
     global $conn;
     $sql = <<<BLOCK

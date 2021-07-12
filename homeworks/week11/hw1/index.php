@@ -52,47 +52,57 @@
     </div>
 <?php
   require_once('util.php');
-  $info = get_page_info();
-  $count = $info['count'];
-  $num_pages = intval($info['num_pages']);
-  $page = (!empty($_GET['page'])) ? intval($_GET['page']) : 1;
-  if ($page > $num_pages) $page = $num_pages;
-  if ($page < 1) $page = 1;
-  $pre_page = $page - 1;
-  $next_page = $page + 1;
-
-  if ($page !== 1) {
-    $go_back_block = <<<BLOCK
-
-      <a href="index.php?page=1">|&lt;</a>
-      <a href="index.php?page={$pre_page}">&lt;</a>
-BLOCK;
-  } else {
-    $go_back_block = "";
-  }
-  if ($page !== $num_pages) {
-    $go_next_block = <<<BLOCK
-
-      <a href="index.php?page={$next_page}">&gt;</a>
-      <a href="index.php?page={$num_pages}">&gt;|</a>
-BLOCK;
-  } else {
-    $go_next_block = "";
-  }
-
-  echo <<<BLOCK
-    <div class="page-info">
-      總共 {$count} 筆留言，這是第 {$page} / {$num_pages} 頁
-    </div>
-
-BLOCK;
-  if ($num_pages > 1) {
+  function get_paginator_block() {
+    $info = get_page_info();
+    $count = $info['count'];
+    $num_pages = intval($info['num_pages']);
+    $page = (!empty($_GET['page'])) ? intval($_GET['page']) : 1;
+    if ($page > $num_pages) $page = $num_pages;
+    if ($page < 1) $page = 1;
+    $pre_page = $page - 1;
+    $next_page = $page + 1;
     echo <<<BLOCK
-    <div class="paginator">{$go_back_block}{$go_next_block}
-    </div>
-    
+      <div class="page-info">
+        總共 {$count} 筆留言，這是第 {$page} / {$num_pages} 頁
+      </div>
 BLOCK;
+
+    // 單頁不顯示分頁
+    if ($num_pages === 1) {
+      return;
+    }
+    
+    if ($page === 1) {
+      $go_back_block = "";
+    } else if ($page === 2) {
+      $go_back_block = "\n        <a href=\"index.php?page=1\">|&lt;</a>";
+    } else {
+      $go_back_block = <<<BLOCK
+        <a href="index.php?page=1">|&lt;</a>
+        <a href="index.php?page={$pre_page}">&lt;</a>
+BLOCK;
+    }
+
+    if ($page === $num_pages) {
+      $go_next_block = "";
+    } else if ($page === $num_pages - 1) {
+      $go_next_block = "\n<a href=\"index.php?page={$num_pages}\">&gt;|</a>";
+    } else {
+      $go_next_block = <<<BLOCK
+        <a href="index.php?page={$next_page}">&gt;</a>
+        <a href="index.php?page={$num_pages}">&gt;|</a>
+BLOCK;
+    }
+
+    if ($num_pages > 1) {
+      echo <<<BLOCK
+      <div class="paginator">{$go_back_block}{$go_next_block}
+      </div>
+      
+BLOCK;
+    }
   }
+  get_paginator_block();
 ?>
   </main>
   <script>

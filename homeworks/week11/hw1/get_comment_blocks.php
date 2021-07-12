@@ -1,6 +1,7 @@
 <?php
   require_once('util.php');
-  $result = get_comments();
+  $page = (isset($_GET['page'])) ? intval($_GET['page']) : 1;
+  $result = get_comments($page);
   $role = get_role();
 
   while ($row = $result->fetch_assoc()) { // 逐行讀取資料
