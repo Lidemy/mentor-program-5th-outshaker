@@ -1,3 +1,12 @@
+<?php
+  session_start();
+  require_once('util.php');
+  if (!is_login()) {
+    header("Location: index.php?errCode=403");
+    die();
+  }
+  session_commit();
+?>
 <!DOCTYPE html>
 <html>
 <head>
