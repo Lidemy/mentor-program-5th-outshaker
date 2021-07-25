@@ -27,7 +27,7 @@ BLOCK;
     }
     var_dump($stmt->affected_rows);
     if ($stmt->affected_rows === 0) {
-      header("Location: admin.php?errCode=404");
+      header("Location: 404.php");
       die();
     }
     header("Location: admin.php");

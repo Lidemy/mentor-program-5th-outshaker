@@ -23,7 +23,7 @@ BLOCK;
   }
   $row = get_post($_GET['id']);
   if(!$row) {
-    header("Location: admin.php?errCode=404");
+    header("Location: 404.php");
     die();
   }
   // var_dump($row);
