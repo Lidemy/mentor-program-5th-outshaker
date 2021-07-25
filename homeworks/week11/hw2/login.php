@@ -1,15 +1,12 @@
 <!DOCTYPE html>
-
 <html>
 <head>
   <meta charset="utf-8">
-
   <title>部落格</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="normalize.css" />
   <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
   <nav class="navbar">
     <div class="wrapper navbar__wrapper">
@@ -42,14 +39,12 @@
         <div class="input__label">USERNAME</div>
         <input class="input__field" type="text" name="id" />
       </div>
-      
       <div class="input__wrapper">
         <div class="input__label">PASSWORD</div>
         <input class="input__field" type="password" name="pass" />
       </div>
       <input type='submit' value="登入" />
     </form>
-     
   </div>
 </body>
 </html>

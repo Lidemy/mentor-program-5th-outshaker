@@ -1,15 +1,12 @@
 <!DOCTYPE html>
-
 <html>
 <head>
   <meta charset="utf-8">
-
   <title>部落格</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="normalize.css" />
   <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
   <nav class="navbar">
     <div class="wrapper navbar__wrapper">
@@ -54,7 +51,6 @@
             </a>
           </div>
         </div>
-
       </div>
     </div>
   </div>
