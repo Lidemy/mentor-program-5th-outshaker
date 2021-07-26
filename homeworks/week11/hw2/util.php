@@ -29,7 +29,7 @@ BLOCK;
       return false;
     }
     $result = $stmt->get_result();
-    if (!$result) return false;
+    if (!$result) return [];
     $arr = array();
     while($row = $result->fetch_assoc()) {
       $arr[] = $row;
@@ -53,7 +53,7 @@ BLOCK;
       return false;
     }
     $result = $stmt->get_result();
-    if (!$result) return false;
+    if (!$result) return [];
     $arr = array();
     while($row = $result->fetch_assoc()) {
       $arr[] = $row;

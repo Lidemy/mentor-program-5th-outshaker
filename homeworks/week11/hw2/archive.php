@@ -1,10 +1,6 @@
 <?php
   require_once('util.php');
   $posts = get_posts(); // 取得全部文章
-  if(!$posts) {
-    header("Location: 404.php");
-    die();
-  }
 ?>
 <!DOCTYPE html>
 <html>

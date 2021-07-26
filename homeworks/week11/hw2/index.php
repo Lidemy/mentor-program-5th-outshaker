@@ -1,10 +1,6 @@
 <?php
   require_once('util.php');
   $posts = get_posts(1); // 取得第一頁 (前五篇) 文章
-  if(!$posts) {
-    header("Location: 404.php");
-    die();
-  }
 ?>
 <!DOCTYPE html>
 <html>
