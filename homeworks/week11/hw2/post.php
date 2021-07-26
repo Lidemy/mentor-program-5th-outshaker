@@ -73,7 +73,7 @@ BLOCK;
         <div class="post__header">
           <div><?php echo escape($row['title']); ?></div>
           <div class="post__actions">
-            <a class="post__action" href="edit_post.php?<?php echo escape$row['id']); ?>">編輯</a>
+            <a class="post__action" href="edit_post.php?id=<?php echo escape($row['id']); ?>">編輯</a>
           </div>
         </div>
         <div class="post__info">
