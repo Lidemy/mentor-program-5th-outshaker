@@ -3,7 +3,7 @@
   require_once('conn.php');
   require_once('util.php');
   if (!is_login()) {
-    header("Location: index.php?errCode=403");
+    header("Location: login.php");
     die();
   }
   if(empty($_GET['id'])) {
