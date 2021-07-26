@@ -45,18 +45,18 @@
 <?php foreach($posts as $post) {?>
       <article class="post">
         <div class="post__header">
-          <div><?php echo $post['title']; ?></div>
+          <div><?php echo escape($post['title']); ?></div>
           <div class="post__actions">
             <!--<a class="post__action" href="edit.php">編輯</a>-->
           </div>
         </div>
         <div class="post__info">
-          <?php echo $post['posted_at']; ?>
+          <?php echo escape($post['posted_at']); ?>
         </div>
         <div class="post__content">
-          <?php echo $post['content']; ?>
+          <?php echo escape($post['content']); ?>
         </div>
-        <a class="btn-read-more" href="post.php?id=<?php echo $post['id']; ?>">READ MORE</a>
+        <a class="btn-read-more" href="post.php?id=<?php echo escape($post['id']); ?>">READ MORE</a>
       </article>
 <?php }?>
     </div>

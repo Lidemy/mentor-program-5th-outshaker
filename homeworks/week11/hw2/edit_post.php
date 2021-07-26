@@ -70,17 +70,17 @@ BLOCK;
             編輯文章：
           </div>
           <div class="edit-post__input-wrapper">
-            <input class="edit-post__input" placeholder="請輸入文章標題" value="<?php echo $row['title']; ?>" name="title"/>
+            <input class="edit-post__input" placeholder="請輸入文章標題" value="<?php echo escape($row['title']); ?>" name="title"/>
           </div>
           <div class="edit-post__input-wrapper">
             <textarea rows="20" class="edit-post__content" name="content">
-              <?php echo $row['content']; ?>
+              <?php echo escape($row['content']); ?>
             </textarea>
           </div>
           <div class="edit-post__btn-wrapper">
               <div class="edit-post__btn">送出</div>
           </div>
-          <input type="hidden" name="id" value="<?php echo $row['id']; ?>"/>
+          <input type="hidden" name="id" value="<?php echo escape($row['id']); ?>"/>
         </form>
       </div>
     </div>

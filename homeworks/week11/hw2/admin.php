@@ -51,16 +51,16 @@
 <?php foreach($posts as $post) {?>
         <div class="admin-post">
           <div class="admin-post__title">
-            <?php echo $post['title']; ?>
+            <?php echo escape($post['title']); ?>
           </div>
           <div class="admin-post__info">
             <div class="admin-post__created-at">
-              <?php echo $post['posted_at']; ?>
+              <?php echo escape($post['posted_at']); ?>
             </div>
-            <a class="admin-post__btn" href="edit_post.php?id=<?php echo $post['id']; ?>">
+            <a class="admin-post__btn" href="edit_post.php?id=<?php echo escape($post['id']); ?>">
               編輯
             </a>
-            <a class="admin-post__btn" href="cmd_del_post.php?id=<?php echo $post['id']; ?>">
+            <a class="admin-post__btn" href="cmd_del_post.php?id=<?php echo escape($post['id']); ?>">
               刪除
             </a>
           </div>

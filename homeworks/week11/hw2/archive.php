@@ -45,7 +45,7 @@
       <ul>
 <?php foreach($posts as $post) {?>
         <li class="post">
-          <a href="post.php?id=<?php echo $post['id']; ?>"><?php echo $post['title']; ?></a> - <?php echo $post['posted_at']; ?>
+          <a href="post.php?id=<?php echo escape($post['id']); ?>"><?php echo escape($post['title']); ?></a> - <?php echo escape($post['posted_at']); ?>
         </li>
 <?php }?>
       </ul>

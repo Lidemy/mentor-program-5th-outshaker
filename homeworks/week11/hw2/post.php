@@ -1,5 +1,7 @@
 <?php
   require_once('conn.php');
+  require_once('util.php');
+
   function get_post($id) {
     global $conn;
     $sql = <<<BLOCK
@@ -65,16 +67,16 @@ BLOCK;
     <div class="posts">
       <article class="post">
         <div class="post__header">
-          <div><?php echo $row['title']; ?></div>
+          <div><?php echo escape($row['title']); ?></div>
           <div class="post__actions">
-            <a class="post__action" href="edit_post.php?<?php echo $row['id']; ?>">編輯</a>
+            <a class="post__action" href="edit_post.php?<?php echo escape$row['id']); ?>">編輯</a>
           </div>
         </div>
         <div class="post__info">
-          <?php echo $row['posted_at']; ?>
+          <?php echo escape($row['posted_at']); ?>
         </div>
         <div class="post__content">
-          <?php echo $row['content']; ?>
+          <?php echo escape($row['content']); ?>
         </div>
       </article>
     </div>
