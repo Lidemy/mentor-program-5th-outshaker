@@ -5,7 +5,11 @@
     header("Location: index.php?errCode=403");
     die();
   }
-  session_commit();
+  $posts = get_posts(); // 取得全部文章
+  if(!$posts) {
+    header("Location: 404.php");
+    die();
+  }
 ?>
 <!DOCTYPE html>
 <html>
@@ -44,25 +48,28 @@
   <div class="container-wrapper">
     <div class="container">
       <div class="admin-posts">
+<?php foreach($posts as $post) {?>
         <div class="admin-post">
           <div class="admin-post__title">
-              嗨～歡迎來到程式新手村 feat. 胡斯的異想世界
+            <?php echo $post['title']; ?>
           </div>
           <div class="admin-post__info">
             <div class="admin-post__created-at">
-              2020/07/01 10:15
+              <?php echo $post['posted_at']; ?>
             </div>
-            <a class="admin-post__btn" href="edit.php">
+            <a class="admin-post__btn" href="edit_post.php?id=<?php echo $post['id']; ?>">
               編輯
             </a>
-            <a class="admin-post__btn">
+            <a class="admin-post__btn" href="cmd_del_post.php?id=<?php echo $post['id']; ?>">
               刪除
             </a>
           </div>
         </div>
+<?php }?>
       </div>
     </div>
   </div>
   <footer>Copyright © 2020 Who's Blog All Rights Reserved.</footer>
 </body>
 </html>
+<?php session_commit(); ?>
