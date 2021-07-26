@@ -67,7 +67,7 @@ BLOCK;
       <div class="edit-post">
         <form id="editPostForm" action="cmd_edit_post.php" method="POST">
           <div class="edit-post__title">
-            發表文章：
+            編輯文章：
           </div>
           <div class="edit-post__input-wrapper">
             <input class="edit-post__input" placeholder="請輸入文章標題" value="<?php echo $row['title']; ?>" name="title"/>
