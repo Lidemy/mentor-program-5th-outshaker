@@ -1,3 +1,11 @@
+<?php
+  require_once('util.php');
+  $posts = get_posts(1); // 取得第一頁 (前五篇) 文章
+  if(!$posts) {
+    header("Location: 404.php");
+    die();
+  }
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,34 +42,23 @@
   </section>
   <div class="container-wrapper">
     <div class="posts">
+<?php foreach($posts as $post) {?>
       <article class="post">
         <div class="post__header">
-          <div>嗨～歡迎來到程式新手村 feat. 胡斯的異想世界</div>
+          <div><?php echo $post['title']; ?></div>
           <div class="post__actions">
-            <a class="post__action" href="edit.php">編輯</a>
+            <!--<a class="post__action" href="edit.php">編輯</a>-->
           </div>
         </div>
         <div class="post__info">
-          2020/07/01 11:11:12
+          <?php echo $post['posted_at']; ?>
         </div>
-        <div class="post__content">郭沫若說過一句富有哲理的話，形成天才的決定因素應該是勤奮。這句話語雖然很短，但令我浮想聯翩。每個人都不得不面對這些問題。在面對這種問題時， 我認為， 生活中，若中午吃什麼出現了，我們就不得不考慮它出現了的事實。中午吃什麼，發生了會如何，不發生又會如何。我們一般認為，抓住了問題的關鍵，其他一切則會迎刃而解。我們都知道，只要有意義，那麼就必須慎重考慮。現在，解決中午吃什麼的問題，是非常非常重要的。所以， 那麼， 一般來講，我們都必須務必慎重的考慮考慮
+        <div class="post__content">
+          <?php echo $post['content']; ?>
         </div>
-        <a class="btn-read-more" href="blog.php">READ MORE</a>
+        <a class="btn-read-more" href="post.php?id=<?php echo $post['id']; ?>">READ MORE</a>
       </article>
-      <article class="post">
-        <div class="post__header">
-          <div>嗨～歡迎來到程式新手村 feat. 胡斯的異想世界</div>
-          <div class="post__actions">
-            <a class="post__action" href="#">編輯</a>
-          </div>
-        </div>
-        <div class="post__info">
-          2020/07/01 11:11:12
-        </div>
-        <div class="post__content">郭沫若說過一句富有哲理的話，形成天才的決定因素應該是勤奮。這句話語雖然很短，但令我浮想聯翩。每個人都不得不面對這些問題。在面對這種問題時， 我認為， 生活中，若中午吃什麼出現了，我們就不得不考慮它出現了的事實。中午吃什麼，發生了會如何，不發生又會如何。我們一般認為，抓住了問題的關鍵，其他一切則會迎刃而解。我們都知道，只要有意義，那麼就必須慎重考慮。現在，解決中午吃什麼的問題，是非常非常重要的。所以， 那麼， 一般來講，我們都必須務必慎重的考慮考慮
-        </div>
-        <a class="btn-read-more">READ MORE</a>
-      </article>
+<?php }?>
     </div>
   </div>
   <footer>Copyright © 2020 Who's Blog All Rights Reserved.</footer>
