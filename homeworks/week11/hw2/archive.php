@@ -1,6 +1,6 @@
 <?php
   require_once('util.php');
-  $posts = get_posts(1); // 取得第一頁 (前五篇) 文章
+  $posts = get_posts(); // 取得全部文章
   if(!$posts) {
     header("Location: 404.php");
     die();
@@ -23,7 +23,7 @@
       </div>
       <ul class="navbar__list">
         <div>
-          <li><a href="archive.php">文章列表</a></li>
+          <li>文章列表</li>
           <li><a href="#">分類專區</a></li>
           <li><a href="#">關於我</a></li>
         </div>
@@ -42,23 +42,13 @@
   </section>
   <div class="container-wrapper">
     <div class="posts">
+      <ul>
 <?php foreach($posts as $post) {?>
-      <article class="post">
-        <div class="post__header">
-          <div><?php echo $post['title']; ?></div>
-          <div class="post__actions">
-            <!--<a class="post__action" href="edit.php">編輯</a>-->
-          </div>
-        </div>
-        <div class="post__info">
-          <?php echo $post['posted_at']; ?>
-        </div>
-        <div class="post__content">
-          <?php echo $post['content']; ?>
-        </div>
-        <a class="btn-read-more" href="post.php?id=<?php echo $post['id']; ?>">READ MORE</a>
-      </article>
+        <li class="post">
+          <a href="post.php?id=<?php echo $post['id']; ?>"><?php echo $post['title']; ?></a> - <?php echo $post['posted_at']; ?>
+        </li>
 <?php }?>
+      </ul>
     </div>
   </div>
   <footer>Copyright © 2020 Who's Blog All Rights Reserved.</footer>

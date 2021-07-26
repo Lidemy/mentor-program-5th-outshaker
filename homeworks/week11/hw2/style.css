@@ -258,3 +258,6 @@ footer {
   text-align: center;
 }
 
+.posts > ul {
+  list-style: none;
+}

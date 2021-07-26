@@ -24,7 +24,7 @@
       </div>
       <ul class="navbar__list">
         <div>
-          <li><a href="#">文章列表</a></li>
+          <li><a href="archive.php">文章列表</a></li>
           <li><a href="#">分類專區</a></li>
           <li><a href="#">關於我</a></li>
         </div>
