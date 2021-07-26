@@ -30,7 +30,7 @@
         </div>
         <div>
           <li><a href="admin.php">管理後台</a></li>
-          <li><a href="#">登出</a></li>
+          <li><a href="cmd_logout.php">登出</a></li>
         </div>
       </ul>
     </div>

@@ -30,7 +30,7 @@
         </div>
         <div>
           <li><a href="new_post.php">新增文章</a></li>
-          <li><a href="#">登出</a></li>
+          <li><a href="cmd_logout.php">登出</a></li>
         </div>
       </ul>
     </div>

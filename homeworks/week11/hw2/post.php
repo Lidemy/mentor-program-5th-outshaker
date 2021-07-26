@@ -52,7 +52,11 @@ BLOCK;
         </div>
         <div>
           <li><a href="admin.php">管理後台</a></li>
-          <li><a href="#">登出</a></li>
+<?php if (is_login()) { ?>
+          <li><a href="cmd_logout.php">登出</a></li>
+<?php } else { ?>
+          <li><a href="login.php">登入</a></li>
+<?php } ?>
         </div>
       </ul>
     </div>
