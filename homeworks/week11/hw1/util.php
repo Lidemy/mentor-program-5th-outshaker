@@ -183,7 +183,7 @@ BLOCK;
         U.nickname,
         C.content,
         C.created_at
-      FROM `sixwigns-users` AS U
+      FROM `sixwings-users` AS U
         LEFT JOIN `sixwings-comments` AS C
         ON U.id = C.user_id
       WHERE C.id = ? and C.is_del = 0;
