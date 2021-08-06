@@ -1,0 +1,168 @@
+* {
+  /* border: 1px solid red; */
+  font-family: "Microsoft JhengHei", sans-serif;
+}
+
+body {
+  box-sizing: border-box;
+  margin: 0;
+  background-color: #f7f7f7;
+  
+}
+
+
+.warning {
+  background: #ffc4c6;
+  color: #a20606;
+  padding: 10px;
+  text-align: center;
+}
+
+.error {
+  background: #ffc4c6;
+  color: #a20606;
+}
+
+.login-block {
+  
+}
+
+a.btn {
+  display: inline-block;
+  width: 100px;
+  margin: 10px;
+  padding: 10px;
+  font-size: 16px;
+  color: #583c63;
+  background: white;
+  text-decoration: none;
+  text-align: center;
+  border: 1px solid #c2dffb;
+  border-radius: 5px;
+}
+
+.board {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 80em;
+  margin: 10px auto;
+  padding: 10px 30px;
+  border-radius: 5px;
+  box-shadow: 1px 1px 3px #e8e8e8;;
+}
+
+.board-title {
+  margin: 20px 0;
+  padding: 0;
+  font-size: 30px;
+  font-weight: 100;
+}
+
+.input-block {
+  margin-top: 10px;
+}
+
+.input-block input {
+  padding: 5px;
+}
+
+.add-comment-form {
+  
+}
+
+.login-form input,
+.regist-form input,
+.add-comment-form input,
+.update-role-form input {
+  border: 1px solid #c2dffb;
+}
+
+.add-comment-form textarea {
+  box-sizing: border-box;
+  width: 80%;
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #c2dffb;
+}
+
+.board-submit-btn {
+  width: 100px;
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 16px;
+  color: #583c63;
+  background: white;
+  border: 1px solid #c2dffb;
+  border-radius: 5px;
+}
+
+.hr {
+  border: 0.5px solid #e8e8e8;
+  margin: 20px auto;
+  max-width: 95%;
+}
+
+.comments {
+  
+}
+
+.comment {
+  display: flex;
+  margin: 1em 0;
+}
+
+.comment-avatar {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  background: #e4f0fb;
+}
+
+.comment-body {
+  flex: 1;
+  margin: 0 10px;
+}
+
+.comment-info {
+  
+}
+
+.comment-username {
+  font-weight: bold;
+  color: #5c9edc;
+}
+
+.comment-time {
+  color: #a0a0a0;
+}
+
+.comment-content {
+  margin-top: 10px;
+  max-width: 100%;
+  white-space:pre-line;
+  word-break: break-all;
+}
+
+.page-info {
+  text-align: center;
+}
+
+.paginator {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.paginator a {
+  text-decoration: none;
+  color: #5c9edc;
+  border: 1px solid #5c9edc;
+  padding: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 2px solid black;
+  text-align: center;
+}
