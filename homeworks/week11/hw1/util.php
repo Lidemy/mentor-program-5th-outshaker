@@ -134,6 +134,11 @@ BLOCK;
     global $conn;
     $username = $_SESSION['username'];
     $user_id = $_SESSION['user_id'];
+    $role = get_role();
+    if ($role['can_post'] === 0) {
+      header("Location: index.php?errCode=2");
+      die();
+    }
     $content = $_POST['content'];
     $sql = "INSERT INTO `sixwings-comments` (user_id, content) VALUES (?, ?);";
     $stmt = $conn->prepare($sql);
