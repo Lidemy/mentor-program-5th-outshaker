@@ -1,8 +1,31 @@
-/* eslint-disable-next-line */
-import 'https://code.jquery.com/jquery-3.6.0.min.js'
+import 'jquery'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import './site.css'
 
-const { $ } = window
 const API_BASE_URL = 'http://mentor-program.co/mtr04group5/sixwings/w13/hw2/api'
+
+const boardTemplate = `
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">新增留言</h5>
+    <form>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="inputGroup-sizing-default">暱稱</span>
+        <input name="nickname" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" maxlength="20">
+      </div>
+      <div class="input-group mb-3">
+        <textarea name="content" class="form-control" aria-label="留言" placeholder="想說點什麼呢？" rows=5></textarea>
+      </div>
+      <div class="input-group mb-3 add-comment-btn">
+        <button type="submit" class="btn btn-primary">送出</button>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="comments"></div>
+<div class="bottom mb-3">
+  <button class="btn btn-primary load-more-btn">載入更多</button>
+</div>`
 
 function escape(string) {
   const map = {
@@ -20,28 +43,7 @@ function escape(string) {
 function init(options) {
   const { boardName, boardID } = options
   const boardSelector = `#${boardID}`
-  const boardTemplate = `
-  <div class="card">
-    <div class="card-body">
-      <h5 class="card-title">新增留言</h5>
-      <form>
-        <div class="input-group mb-3">
-          <span class="input-group-text" id="inputGroup-sizing-default">暱稱</span>
-          <input name="nickname" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" maxlength="20">
-        </div>
-        <div class="input-group mb-3">
-          <textarea name="content" class="form-control" aria-label="留言" placeholder="想說點什麼呢？" rows=5></textarea>
-        </div>
-        <div class="input-group mb-3 add-comment-btn">
-          <button type="submit" class="btn btn-primary">送出</button>
-        </div>
-      </form>
-    </div>
-  </div>
-  <div class="comments"></div>
-  <div class="bottom mb-3">
-    <button class="btn btn-primary load-more-btn">載入更多</button>
-  </div>`
+
   let oldestId = null
 
   function loadComments(before = null) {
@@ -87,23 +89,18 @@ function init(options) {
   }
 
   function appendComment(comment, reversed = false) {
-    if (reversed) {
-      $(`${boardSelector} .comments`).prepend(`<div class="card">
-        <div class="card-body">
-          <h5 class="card-title">${escape(comment.nickname)}</h5>
-          <h6 class="card-subtitle mb-2 text-muted">${escape(comment.created_at)}</h6>
-          <p class="card-text">${escape(comment.content)}</p>
-        </div>
-      </div>`)
-      return
-    }
-    $(`${boardSelector} .comments`).append(`<div class="card">
+    const commentTemplate = `<div class="card">
       <div class="card-body">
         <h5 class="card-title">${escape(comment.nickname)}</h5>
         <h6 class="card-subtitle mb-2 text-muted">#${comment.id} ${escape(comment.created_at)}</h6>
         <p class="card-text">${escape(comment.content)}</p>
       </div>
-    </div>`)
+    </div>`
+    if (reversed) {
+      $(`${boardSelector} .comments`).prepend(commentTemplate)
+      return
+    }
+    $(`${boardSelector} .comments`).append(commentTemplate)
   }
 
   function appendComments(comments, reversed = false) {
