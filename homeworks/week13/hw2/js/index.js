@@ -129,8 +129,14 @@ function init(options) {
 }
 
 $(document).ready(() => {
-  init({
-    boardName: 'default',
-    boardID: 'guestbook'
-  })
+  const loaded = {}
+  for (const options of window.boards) {
+    console.log(options)
+    if (!loaded[options.boardID]) {
+      init(options)
+      loaded[options.boardID] = true
+    } else {
+      console.error(`${options.boardID} has been used, can't render board ${options.boardName}`)
+    }
+  }
 })
